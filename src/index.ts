@@ -18,6 +18,8 @@ import {
   createPresentation,
   getPresentation,
   listPresentations,
+  slideTools,
+  addSlide,
 } from './tools/index.js';
 
 /**
@@ -40,7 +42,7 @@ const server = new Server(
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [...presentationTools],
+    tools: [...presentationTools, ...slideTools],
   };
 });
 
@@ -64,6 +66,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'list_presentations':
         result = await listPresentations(args as any);
+        break;
+
+      case 'add_slide':
+        result = await addSlide(args as any);
         break;
 
       default:

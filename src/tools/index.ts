@@ -7,8 +7,8 @@
 // Presentation management tools
 export * from './presentations/index.js';
 
-// Slide operation tools (not yet implemented)
-// export * from './slides/index.js';
+// Slide operation tools
+export * from './slides/index.js';
 
 // Content insertion tools (not yet implemented)
 // export * from './content/index.js';

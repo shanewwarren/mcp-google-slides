@@ -305,13 +305,13 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 5: Slide Operation Tools
 
-**Status:** Not started
+**Status:** In progress (1/4 tasks complete)
 **Dependencies:** Priority 4 (Presentation tools for testing)
 **Blocking:** Content insertion tools
 
 ### Tasks
 
-- [ ] **Implement add_slide tool** (refs: specs/slide-operations.md)
+- [x] **Implement add_slide tool** (refs: specs/slide-operations.md)
   - Dependencies: Slides API client
   - Complexity: Medium
   - File: `src/tools/slides/add-slide.ts`
@@ -320,6 +320,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - API: `batchUpdate()` with `CreateSlideRequest`
   - Default layout: `TITLE_AND_BODY`
   - Object ID generation (5-50 chars)
+  - **Note:** Implemented with automatic placeholder discovery by fetching the presentation after slide creation. Generates unique object IDs using timestamp and random string. Registered with MCP server in src/index.ts.
 
 - [ ] **Implement get_slide tool** (refs: specs/slide-operations.md)
   - Dependencies: Slides API client
@@ -756,7 +757,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 - [x] list_presentations
 
 **Slide Operations:**
-- [ ] add_slide
+- [x] add_slide
 - [ ] get_slide
 - [ ] delete_slide
 - [ ] reorder_slides
@@ -774,7 +775,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 - [ ] create_bullets
 - [ ] remove_bullets (not in initial spec count, added for completeness)
 
-**TOTAL: 3/17 tools implemented (18%)**
+**TOTAL: 4/17 tools implemented (24%)**
 
 ---
 
