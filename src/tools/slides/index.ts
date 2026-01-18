@@ -22,6 +22,12 @@ import {
   type DeleteSlideInput,
   type DeleteSlideOutput,
 } from './delete-slide.js';
+import {
+  reorderSlides,
+  ReorderSlidesInputSchema,
+  type ReorderSlidesInput,
+  type ReorderSlidesOutput,
+} from './reorder-slides.js';
 
 /**
  * Export all slide tool implementations
@@ -30,6 +36,7 @@ export {
   addSlide,
   getSlide,
   deleteSlide,
+  reorderSlides,
 };
 
 /**
@@ -42,6 +49,8 @@ export type {
   GetSlideOutput,
   DeleteSlideInput,
   DeleteSlideOutput,
+  ReorderSlidesInput,
+  ReorderSlidesOutput,
 };
 
 /**
@@ -51,6 +60,7 @@ export {
   AddSlideInputSchema,
   GetSlideInputSchema,
   DeleteSlideInputSchema,
+  ReorderSlidesInputSchema,
 };
 
 /**
@@ -127,6 +137,29 @@ export const slideTools = [
         },
       },
       required: ['presentationId', 'slideId'],
+    },
+  },
+  {
+    name: 'reorder_slides',
+    description: 'Reorder slides in a presentation',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideIds: {
+          type: 'array',
+          items: { type: 'string' },
+          description: 'Slide IDs in their new order',
+        },
+        insertionIndex: {
+          type: 'number',
+          description: 'New starting position for the slides',
+        },
+      },
+      required: ['presentationId', 'slideIds', 'insertionIndex'],
     },
   },
 ] as const;

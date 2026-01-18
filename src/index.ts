@@ -22,6 +22,7 @@ import {
   addSlide,
   getSlide,
   deleteSlide,
+  reorderSlides,
 } from './tools/index.js';
 
 /**
@@ -80,6 +81,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'delete_slide':
         result = await deleteSlide(args as any);
+        break;
+
+      case 'reorder_slides':
+        result = await reorderSlides(args as any);
         break;
 
       default:

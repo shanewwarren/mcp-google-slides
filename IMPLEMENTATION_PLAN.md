@@ -305,7 +305,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 5: Slide Operation Tools
 
-**Status:** In progress (3/4 tasks complete)
+**Status:** ✅ Complete
 **Dependencies:** Priority 4 (Presentation tools for testing)
 **Blocking:** Content insertion tools
 
@@ -340,20 +340,22 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - API: `batchUpdate()` with `DeleteObjectRequest`
   - **Note:** Implemented with validation to prevent deleting the only slide in a presentation. Verifies slide exists before attempting deletion. Returns count of remaining slides after deletion. Registered with MCP server in src/index.ts.
 
-- [ ] **Implement reorder_slides tool** (refs: specs/slide-operations.md)
+- [x] **Implement reorder_slides tool** (refs: specs/slide-operations.md)
   - Dependencies: Slides API client
   - Complexity: Medium
   - File: `src/tools/slides/reorder-slides.ts`
   - Input: `{ presentationId, slideIds, insertionIndex }`
   - Output: `{ reordered: true }`
   - API: `batchUpdate()` with `UpdateSlidesPositionRequest`
+  - **Note:** Implemented with input validation using Zod schema. Validates slide IDs exist in presentation and insertion index is within bounds. Uses UpdateSlidesPositionRequest via SlidesClient.batchUpdate(). Registered with MCP server in src/index.ts.
 
-- [ ] **Register slide tools with MCP server** (refs: specs/slide-operations.md)
+- [x] **Register slide tools with MCP server** (refs: specs/slide-operations.md)
   - Dependencies: All 4 slide tools
   - Complexity: Low
   - File: `src/tools/slides/index.ts`
   - Export tool definitions
   - Add Zod schemas for input validation
+  - **Note:** All 4 slide tools (add_slide, get_slide, delete_slide, reorder_slides) are now registered and fully functional.
 
 ---
 
@@ -762,7 +764,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 - [x] add_slide
 - [x] get_slide
 - [x] delete_slide
-- [ ] reorder_slides
+- [x] reorder_slides
 
 **Content Insertion:**
 - [ ] insert_text
@@ -777,7 +779,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 - [ ] create_bullets
 - [ ] remove_bullets (not in initial spec count, added for completeness)
 
-**TOTAL: 6/17 tools implemented (35%)**
+**TOTAL: 7/17 tools implemented (41%)**
 
 ---
 
