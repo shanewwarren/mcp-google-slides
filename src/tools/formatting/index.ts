@@ -11,10 +11,24 @@ import {
   type FormatTextOutput,
 } from './format-text.js';
 
+import {
+  formatParagraph,
+  FormatParagraphInputSchema,
+  type FormatParagraphInput,
+  type FormatParagraphOutput,
+} from './format-paragraph.js';
+
+import {
+  createBullets,
+  CreateBulletsInputSchema,
+  type CreateBulletsInput,
+  type CreateBulletsOutput,
+} from './create-bullets.js';
+
 /**
  * Export all formatting tool implementations
  */
-export { formatText };
+export { formatText, formatParagraph, createBullets };
 
 /**
  * Export all formatting tool types
@@ -22,6 +36,10 @@ export { formatText };
 export type {
   FormatTextInput,
   FormatTextOutput,
+  FormatParagraphInput,
+  FormatParagraphOutput,
+  CreateBulletsInput,
+  CreateBulletsOutput,
 };
 
 /**
@@ -29,6 +47,8 @@ export type {
  */
 export {
   FormatTextInputSchema,
+  FormatParagraphInputSchema,
+  CreateBulletsInputSchema,
 };
 
 /**
@@ -108,6 +128,120 @@ export const formattingTools = [
         },
       },
       required: ['presentationId', 'objectId', 'style'],
+    },
+  },
+  {
+    name: 'format_paragraph',
+    description: 'Apply paragraph formatting (alignment, spacing, indentation)',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        objectId: {
+          type: 'string',
+          description: 'ID of the shape/text box',
+        },
+        style: {
+          type: 'object',
+          description: 'Paragraph style to apply',
+          properties: {
+            alignment: {
+              type: 'string',
+              enum: ['START', 'CENTER', 'END', 'JUSTIFIED'],
+              description: 'Text alignment',
+            },
+            lineSpacing: {
+              type: 'number',
+              description: 'Line spacing percentage (100 = single, 150 = 1.5x)',
+            },
+            spaceBefore: {
+              type: 'number',
+              description: 'Space before paragraph in points',
+            },
+            spaceAfter: {
+              type: 'number',
+              description: 'Space after paragraph in points',
+            },
+            indentStart: {
+              type: 'number',
+              description: 'Left indent in points',
+            },
+            indentFirstLine: {
+              type: 'number',
+              description: 'First line indent in points (can be negative for hanging indent)',
+            },
+          },
+        },
+        range: {
+          type: 'object',
+          description: 'Range to format. Omit to format all paragraphs.',
+          properties: {
+            startIndex: {
+              type: 'number',
+              description: 'Start index (0-based)',
+            },
+            endIndex: {
+              type: 'number',
+              description: 'End index (exclusive). Omit for "to end"',
+            },
+          },
+          required: ['startIndex'],
+        },
+      },
+      required: ['presentationId', 'objectId', 'style'],
+    },
+  },
+  {
+    name: 'create_bullets',
+    description: 'Create a bulleted or numbered list from text paragraphs',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        objectId: {
+          type: 'string',
+          description: 'ID of the shape/text box',
+        },
+        bulletPreset: {
+          type: 'string',
+          enum: [
+            'BULLET_DISC_CIRCLE_SQUARE',
+            'BULLET_DIAMONDX_ARROW3D_SQUARE',
+            'BULLET_CHECKBOX',
+            'BULLET_ARROW_DIAMOND_DISC',
+            'BULLET_STAR_CIRCLE_SQUARE',
+            'BULLET_ARROW3D_CIRCLE_SQUARE',
+            'NUMBERED_DIGIT_ALPHA_ROMAN',
+            'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS',
+            'NUMBERED_DIGIT_NESTED',
+            'NUMBERED_UPPERALPHA_ALPHA_ROMAN',
+            'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT',
+          ],
+          description: 'Preset bullet/number style (determines appearance at all nesting levels). Default: BULLET_DISC_CIRCLE_SQUARE',
+        },
+        range: {
+          type: 'object',
+          description: 'Range to apply bullets to. Omit for all text.',
+          properties: {
+            startIndex: {
+              type: 'number',
+              description: 'Start index (0-based)',
+            },
+            endIndex: {
+              type: 'number',
+              description: 'End index (exclusive). Omit for "to end"',
+            },
+          },
+          required: ['startIndex'],
+        },
+      },
+      required: ['presentationId', 'objectId'],
     },
   },
 ] as const;

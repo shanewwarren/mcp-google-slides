@@ -31,6 +31,8 @@ import {
   setSpeakerNotes,
   formattingTools,
   formatText,
+  formatParagraph,
+  createBullets,
 } from './tools/index.js';
 
 /**
@@ -117,6 +119,14 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'format_text':
         result = await formatText(args as any);
+        break;
+
+      case 'format_paragraph':
+        result = await formatParagraph(args as any);
+        break;
+
+      case 'create_bullets':
+        result = await createBullets(args as any);
         break;
 
       default:
