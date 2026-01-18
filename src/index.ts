@@ -29,6 +29,8 @@ import {
   createShape,
   createTable,
   setSpeakerNotes,
+  formattingTools,
+  formatText,
 } from './tools/index.js';
 
 /**
@@ -51,7 +53,7 @@ const server = new Server(
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [...presentationTools, ...slideTools, ...contentTools],
+    tools: [...presentationTools, ...slideTools, ...contentTools, ...formattingTools],
   };
 });
 
@@ -111,6 +113,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'set_speaker_notes':
         result = await setSpeakerNotes(args as any);
+        break;
+
+      case 'format_text':
+        result = await formatText(args as any);
         break;
 
       default:

@@ -13,5 +13,5 @@ export * from './slides/index.js';
 // Content insertion tools
 export * from './content/index.js';
 
-// Text formatting tools (not yet implemented)
-// export * from './formatting/index.js';
+// Text formatting tools
+export * from './formatting/index.js';

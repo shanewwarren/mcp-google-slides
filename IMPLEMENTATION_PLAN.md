@@ -1,25 +1,25 @@
 # Implementation Plan: MCP Google Slides
 
 **Generated:** 2026-01-17 (Updated)
-**Status:** Core features complete (12/16 tools), formatting tools remaining
+**Status:** Core features complete (13/16 tools), formatting tools in progress
 **Based on:** specs/*.md (6 specification files)
 
 ---
 
 ## Executive Summary
 
-This project is in **active development** with core infrastructure and 12 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories (presentations, slides, content) are complete. Remaining work focuses on formatting tools (4 tools).
+This project is in **active development** with core infrastructure and 13 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories (presentations, slides, content) are complete. Remaining work focuses on formatting tools (3 tools).
 
 ### Gap Analysis
 - **Specifications:** ✅ 6/6 complete
-- **Source Code:** ✅ 75% implemented (12/16 tools)
-- **Tools:** ✅ 12/16 implemented
+- **Source Code:** ✅ 81% implemented (13/16 tools)
+- **Tools:** ✅ 13/16 implemented
 - **Infrastructure:** ✅ Complete (auth, clients, utilities, MCP server)
 
 ### Implementation Statistics
 - **Total MCP Tools:** 16 (specifications)
-- **Implemented Tools:** 12 (presentations: 3, slides: 4, content: 5)
-- **Remaining Tools:** 4 (formatting: 4)
+- **Implemented Tools:** 13 (presentations: 3, slides: 4, content: 5, formatting: 1)
+- **Remaining Tools:** 3 (formatting: 3)
 - **Total Components:** ~40 files across 6 modules
 - **External APIs:** Google Slides API, Google Drive API, Google OAuth 2.0
 
@@ -479,29 +479,28 @@ Based on the current implementation state, here are the prioritized remaining ta
 
 ## Priority 7: Text Formatting Tools
 
-**Status:** ❌ Not started (0/4 tools)
+**Status:** ⚠️ In Progress (1/4 tools)
 **Dependencies:** Priority 6 (Content tools) ✅, Priority 3 (Color utils) ✅
 **Blocking:** None
 
-**Note:** The `src/tools/formatting/` directory exists but is currently empty. This is the primary remaining work.
-
 ### Tasks
 
-- [ ] **Implement format_text tool** (refs: specs/text-formatting.md)
+- [x] **Implement format_text tool** (refs: specs/text-formatting.md)
   - Dependencies: Slides API client ✅, Color utils ✅
   - Complexity: High
-  - File: `src/tools/formatting/format-text.ts` (new)
-  - Input: `{ presentationId, slideId, elementId, textRange?, style }`
+  - File: `src/tools/formatting/format-text.ts` ✅
+  - Input: `{ presentationId, objectId, textRange?, style }`
   - Style properties (all optional):
     - `fontFamily` (string)
     - `fontSize` (number, points)
     - `bold`, `italic`, `underline`, `strikethrough` (boolean)
     - `foregroundColor`, `backgroundColor` (hex/RGB/named)
     - `link` (URL string)
-  - API: `batchUpdate()` with `UpdateTextStyleRequest`
-  - Field mask generation for partial updates
-  - TextRange: `{ type: 'ALL' } | { type: 'FIXED_RANGE', startIndex, endIndex }`
-  - Returns: styled character count
+  - API: `batchUpdate()` with `UpdateTextStyleRequest` ✅
+  - Field mask generation for partial updates ✅
+  - TextRange: `{ type: 'ALL' } | { type: 'FIXED_RANGE', startIndex, endIndex } | { type: 'FROM_START_INDEX', startIndex }` ✅
+  - Returns: `{ formatted: true, objectId, styledCharacters }` ✅
+  - **Note:** ✅ Implemented with full support for all text styling properties. Automatic field mask generation ensures only specified properties are updated. Supports all three text range types. Registered with MCP server in src/index.ts.
 
 - [ ] **Implement format_paragraph tool** (refs: specs/text-formatting.md)
   - Dependencies: Slides API client ✅, EMU utils ✅
@@ -823,12 +822,12 @@ Based on the current implementation state, here are the prioritized remaining ta
 - [x] set_speaker_notes ✅
 
 **Text Formatting:**
-- [ ] format_text 🔄
+- [x] format_text ✅
 - [ ] format_paragraph 🔄
 - [ ] create_bullets 🔄
 
-**TOTAL: 12/16 tools implemented (75%)**
-**Remaining: 4 tools (formatting: 4)**
+**TOTAL: 13/16 tools implemented (81%)**
+**Remaining: 3 tools (formatting: 3)**
 
 ---
 
