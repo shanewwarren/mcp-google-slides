@@ -19,21 +19,21 @@ This directory contains specifications for the project's features and systems. E
 
 | Spec | Status | Purpose |
 |------|--------|---------|
-| [oauth-authentication.md](./oauth-authentication.md) | Planned | Browser-based Google OAuth 2.1 with PKCE and token management |
+| [oauth-authentication.md](./oauth-authentication.md) | Implemented | Browser-based Google OAuth 2.1 with PKCE and token management |
 
 ## Presentation Operations
 
 | Spec | Status | Purpose |
 |------|--------|---------|
-| [presentation-management.md](./presentation-management.md) | Planned | Creating, retrieving, and listing presentations |
-| [slide-operations.md](./slide-operations.md) | Planned | Adding and managing slides with predefined layouts |
+| [presentation-management.md](./presentation-management.md) | Implemented | Creating, retrieving, and listing presentations |
+| [slide-operations.md](./slide-operations.md) | Implemented | Adding and managing slides with predefined layouts |
 
 ## Content Creation
 
 | Spec | Status | Purpose |
 |------|--------|---------|
-| [content-insertion.md](./content-insertion.md) | Planned | Adding text, images, shapes, tables, and speaker notes |
-| [text-formatting.md](./text-formatting.md) | Planned | Styling text with fonts, colors, bullets, and paragraph formatting |
+| [content-insertion.md](./content-insertion.md) | Implemented | Adding text, images, shapes, tables, and speaker notes |
+| [text-formatting.md](./text-formatting.md) | Implemented | Styling text with fonts, colors, bullets, and paragraph formatting |
 
 ## Infrastructure
 
