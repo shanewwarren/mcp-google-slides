@@ -198,7 +198,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ### Tasks
 
-- [ ] **Implement EMU conversion utilities** (refs: specs/content-insertion.md)
+- [x] **Implement EMU conversion utilities** (refs: specs/content-insertion.md)
   - Dependencies: None (pure functions)
   - Complexity: Low
   - File: `src/utils/emu.ts`
@@ -210,6 +210,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
     - `inchesToEmu(inches: number): number`
     - `emuToInches(emu: number): number`
     - `pointsToEmu(points: number): number`
+  - **Note:** Also implemented reverse conversion functions (`emuToInches`, `emuToPoints`, `emuToCm`) and `cmToEmu`/`emuToCm` functions for completeness. All conversions use `Math.round()` to ensure integer EMU values.
 
 - [ ] **Implement color parsing utilities** (refs: specs/text-formatting.md)
   - Dependencies: None (pure functions)
