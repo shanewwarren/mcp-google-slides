@@ -245,14 +245,36 @@ interface CreatePresentationInput {
 | MCP Tool | Google API Method | Endpoint |
 |----------|-------------------|----------|
 | create_presentation | presentations.create | POST /v1/presentations |
-| get_presentation | presentations.get | GET /v1/presentations/{id} |
+| get_presentation | presentations.get | GET /v1/presentations/{presentationId} |
 | list_presentations | drive.files.list | GET /drive/v3/files (filtered) |
+
+### Create Presentation Request
+
+```typescript
+// POST https://slides.googleapis.com/v1/presentations
+{
+  title: string  // Optional, defaults to "Untitled presentation"
+}
+```
+
+### Get Presentation Response Structure
+
+The `presentations.get` response includes:
+- `presentationId` - Unique identifier
+- `title` - Presentation title
+- `locale` - Locale setting (e.g., "en")
+- `pageSize` - Dimensions in EMU
+- `slides` - Array of slide pages
+- `masters` - Array of master pages
+- `layouts` - Array of layout pages
 
 ### Drive API Query for Listing
 
 ```
 mimeType='application/vnd.google-apps.presentation'
 ```
+
+**Note:** With `drive.file` scope, only presentations created by this application are returned.
 
 ---
 

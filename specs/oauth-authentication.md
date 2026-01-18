@@ -196,13 +196,14 @@ https://accounts.google.com/o/oauth2/v2/auth
 | Parameter | Value |
 |-----------|-------|
 | `client_id` | Bundled OAuth client ID |
-| `redirect_uri` | `http://127.0.0.1:{port}` (loopback IP, not localhost) |
+| `redirect_uri` | `http://127.0.0.1:{port}` or `http://[::1]:{port}` (loopback IP, not localhost) |
 | `response_type` | `code` |
 | `scope` | Space-delimited scopes |
 | `code_challenge` | Base64URL-encoded SHA256 of code_verifier |
-| `code_challenge_method` | `S256` |
+| `code_challenge_method` | `S256` (recommended) or `plain` |
 | `state` | Random CSRF token |
 | `access_type` | `offline` (to receive refresh token) |
+| `prompt` | `consent` (optional, forces consent screen to ensure refresh token is returned) |
 
 ### Token Endpoint
 
@@ -262,9 +263,11 @@ PKCE (Proof Key for Code Exchange) is **required** for desktop/native apps to pr
 
 ### Code Verifier Generation
 
+The code verifier must be 43-128 characters long, using only unreserved URI characters: `[A-Z]`, `[a-z]`, `[0-9]`, `-`, `.`, `_`, `~`.
+
 ```typescript
 function generateCodeVerifier(): string {
-  // 43-128 characters from: [A-Z] / [a-z] / [0-9] / "-" / "." / "_" / "~"
+  // Generate 32 random bytes (produces ~43 base64url characters)
   const array = new Uint8Array(32);
   crypto.getRandomValues(array);
   return base64UrlEncode(array);
@@ -298,9 +301,10 @@ function base64UrlEncode(buffer: Buffer | Uint8Array): string {
 
 ### Why 127.0.0.1 (not localhost)
 
-- Use `http://127.0.0.1:{port}` instead of `http://localhost:{port}`
-- `localhost` can cause issues with some client firewalls
-- Loopback IP flow is fully supported for Desktop app OAuth client types
+- Use `http://127.0.0.1:{port}` or `http://[::1]:{port}` (IPv6) instead of `http://localhost:{port}`
+- `localhost` can cause issues with some client firewalls and DNS resolution
+- Loopback IP flow is the recommended approach for desktop/CLI OAuth applications
+- **Note:** Custom URI schemes (e.g., `com.example.app://`) are no longer supported due to security concerns
 
 ### Callback Handling
 

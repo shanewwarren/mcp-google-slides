@@ -50,34 +50,37 @@ src/
 
 ### 3.1 PredefinedLayout
 
-Available slide layouts from Google Slides.
+Available slide layouts from Google Slides. These are the official predefined layouts supported by the API.
 
 ```typescript
 type PredefinedLayout =
-  | 'BLANK'                          // Empty slide
-  | 'TITLE'                          // Title and subtitle
+  | 'PREDEFINED_LAYOUT_UNSPECIFIED'  // Unspecified layout (not recommended)
+  | 'BLANK'                          // Empty slide, no placeholders
+  | 'CAPTION_ONLY'                   // Caption at bottom
+  | 'TITLE'                          // Title and subtitle centered
   | 'TITLE_AND_BODY'                 // Title with content area
   | 'TITLE_AND_TWO_COLUMNS'          // Title with two columns
-  | 'TITLE_ONLY'                     // Just a title
-  | 'SECTION_HEADER'                 // Section divider
-  | 'SECTION_TITLE_AND_DESCRIPTION'  // Section with description
-  | 'ONE_COLUMN_TEXT'                // Single column text
-  | 'MAIN_POINT'                     // Emphasis layout
-  | 'BIG_NUMBER'                     // Large number display
-  | 'CAPTION_ONLY';                  // Caption at bottom
+  | 'TITLE_ONLY'                     // Just a title placeholder
+  | 'SECTION_HEADER'                 // Section divider/break
+  | 'SECTION_TITLE_AND_DESCRIPTION'  // Section title on one side, description on other
+  | 'ONE_COLUMN_TEXT'                // Single column text layout
+  | 'MAIN_POINT'                     // Emphasis layout for key points
+  | 'BIG_NUMBER';                    // Large number display for stats
 ```
 
-| Layout | Best For |
-|--------|----------|
-| BLANK | Custom content, images, diagrams |
-| TITLE | Opening/closing slides |
-| TITLE_AND_BODY | Standard content slides |
-| TITLE_AND_TWO_COLUMNS | Comparisons, side-by-side |
-| TITLE_ONLY | Headers, transitions |
-| SECTION_HEADER | Chapter breaks |
-| ONE_COLUMN_TEXT | Long-form text |
-| MAIN_POINT | Key takeaways |
-| BIG_NUMBER | Statistics, metrics |
+| Layout | Best For | Placeholders |
+|--------|----------|--------------|
+| BLANK | Custom content, images, diagrams | None |
+| TITLE | Opening/closing slides | CENTERED_TITLE, SUBTITLE |
+| TITLE_AND_BODY | Standard content slides | TITLE, BODY |
+| TITLE_AND_TWO_COLUMNS | Comparisons, side-by-side | TITLE, BODY (x2) |
+| TITLE_ONLY | Headers, transitions | TITLE |
+| SECTION_HEADER | Chapter breaks | TITLE, SUBTITLE |
+| SECTION_TITLE_AND_DESCRIPTION | Section intros | TITLE, BODY |
+| ONE_COLUMN_TEXT | Long-form text | TITLE, BODY |
+| MAIN_POINT | Key takeaways | TITLE |
+| BIG_NUMBER | Statistics, metrics | TITLE, BODY |
+| CAPTION_ONLY | Image with caption | BODY |
 
 ### 3.2 SlideInfo
 
@@ -314,18 +317,28 @@ type PlaceholderType =
 ```typescript
 {
   createSlide: {
-    objectId?: string,                    // Optional custom ID
-    insertionIndex?: number,
+    objectId?: string,                    // Optional custom ID (5-50 chars, alphanumeric/underscore start)
+    insertionIndex?: number,              // 0-based position, omit to append
     slideLayoutReference: {
-      predefinedLayout: PredefinedLayout
+      predefinedLayout: PredefinedLayout  // OR use layoutId for custom layouts
     },
-    placeholderIdMappings?: [{
-      layoutPlaceholder: { type, index },
-      objectId: string
+    placeholderIdMappings?: [{            // Optional: assign custom IDs to placeholders
+      layoutPlaceholder: {
+        type: PlaceholderType,            // e.g., 'TITLE', 'BODY'
+        index: number                     // For multiple placeholders of same type
+      },
+      objectId: string                    // Custom ID to assign
     }]
   }
 }
 ```
+
+### Object ID Requirements
+
+Object IDs (for slides, shapes, etc.) must follow these rules:
+- Length: 5-50 characters
+- Must start with: alphanumeric `[a-zA-Z0-9]` or underscore `_`
+- Subsequent characters: alphanumeric, underscore, dash `-`, or colon `:`
 
 ---
 

@@ -103,23 +103,32 @@ interface TextRange {
 }
 ```
 
-### 3.4 BulletStyle
+### 3.4 BulletPreset
 
-Bullet list configuration.
+The Google Slides API uses preset bullet configurations rather than individual type selection. Each preset defines bullet/number styles for multiple nesting levels.
 
 ```typescript
-interface BulletStyle {
-  type: 'BULLET' | 'NUMBER' | 'ALPHA' | 'ROMAN';
-  nestingLevel?: number;       // 0-based indentation level
-}
+type BulletPreset =
+  // Bullet styles
+  | 'BULLET_DISC_CIRCLE_SQUARE'        // •, ◦, ▪ (default bullet)
+  | 'BULLET_DIAMONDX_ARROW3D_SQUARE'   // ◇, ➢, ▪
+  | 'BULLET_CHECKBOX'                  // ☐
+  | 'BULLET_ARROW_DIAMOND_DISC'        // ➤, ◆, •
+  | 'BULLET_STAR_CIRCLE_SQUARE'        // ★, ○, ▪
+  | 'BULLET_ARROW3D_CIRCLE_SQUARE'     // ➢, ○, ▪
+  // Numbered styles
+  | 'NUMBERED_DIGIT_ALPHA_ROMAN'       // 1, a, i (default numbered)
+  | 'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS'// 1), a), i)
+  | 'NUMBERED_DIGIT_NESTED'            // 1., 1.1., 1.1.1.
+  | 'NUMBERED_UPPERALPHA_ALPHA_ROMAN'  // A, a, i
+  | 'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT'; // I, A, 1
 ```
 
-| Type | Example |
-|------|---------|
-| BULLET | • Item |
-| NUMBER | 1. Item |
-| ALPHA | a. Item |
-| ROMAN | i. Item |
+| Preset | Level 1 | Level 2 | Level 3 |
+|--------|---------|---------|---------|
+| BULLET_DISC_CIRCLE_SQUARE | • | ◦ | ▪ |
+| NUMBERED_DIGIT_ALPHA_ROMAN | 1. | a. | i. |
+| NUMBERED_DIGIT_NESTED | 1. | 1.1. | 1.1.1. |
 
 ---
 
@@ -291,10 +300,16 @@ interface BulletStyle {
         type: "string",
         description: "ID of the shape/text box"
       },
-      bulletType: {
+      bulletPreset: {
         type: "string",
-        enum: ["BULLET", "NUMBER", "ALPHA", "ROMAN"],
-        default: "BULLET"
+        enum: [
+          "BULLET_DISC_CIRCLE_SQUARE",
+          "BULLET_CHECKBOX",
+          "NUMBERED_DIGIT_ALPHA_ROMAN",
+          "NUMBERED_DIGIT_NESTED"
+        ],
+        default: "BULLET_DISC_CIRCLE_SQUARE",
+        description: "Preset bullet/number style (determines appearance at all nesting levels)"
       },
       range: {
         type: "object",
@@ -351,29 +366,104 @@ interface BulletStyle {
 | create_bullets | CreateParagraphBulletsRequest |
 | remove_bullets | DeleteParagraphBulletsRequest |
 
+### UpdateParagraphStyleRequest Structure
+
+```typescript
+{
+  updateParagraphStyle: {
+    objectId: string,
+    textRange: {
+      type: 'FIXED_RANGE' | 'FROM_START_INDEX' | 'ALL',
+      startIndex?: number,
+      endIndex?: number
+    },
+    style: {
+      alignment?: 'START' | 'CENTER' | 'END' | 'JUSTIFIED',
+      lineSpacing?: number,          // Percentage (100 = single space)
+      direction?: 'LEFT_TO_RIGHT' | 'RIGHT_TO_LEFT',
+      spacingMode?: 'NEVER_COLLAPSE' | 'COLLAPSE_LISTS',
+      spaceAbove?: { magnitude: number, unit: 'PT' },
+      spaceBelow?: { magnitude: number, unit: 'PT' },
+      indentStart?: { magnitude: number, unit: 'PT' },
+      indentEnd?: { magnitude: number, unit: 'PT' },
+      indentFirstLine?: { magnitude: number, unit: 'PT' }
+    },
+    fields: string                   // Field mask
+  }
+}
+```
+
+### CreateParagraphBulletsRequest Structure
+
+```typescript
+{
+  createParagraphBullets: {
+    objectId: string,
+    textRange: {
+      type: 'FIXED_RANGE' | 'FROM_START_INDEX' | 'ALL',
+      startIndex?: number,
+      endIndex?: number
+    },
+    bulletPreset:
+      | 'BULLET_DISC_CIRCLE_SQUARE'      // Standard bullets
+      | 'BULLET_DIAMONDX_ARROW3D_SQUARE' // Decorative bullets
+      | 'BULLET_CHECKBOX'                // Checkbox style
+      | 'BULLET_ARROW_DIAMOND_DISC'      // Arrow bullets
+      | 'BULLET_STAR_CIRCLE_SQUARE'      // Star bullets
+      | 'BULLET_ARROW3D_CIRCLE_SQUARE'   // 3D arrow bullets
+      | 'NUMBERED_DIGIT_ALPHA_ROMAN'     // 1, a, i
+      | 'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS' // 1), a), i)
+      | 'NUMBERED_DIGIT_NESTED'          // 1.1, 1.2
+      | 'NUMBERED_UPPERALPHA_ALPHA_ROMAN'  // A, a, i
+      | 'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT'  // I, A, 1
+  }
+}
+```
+
 ### UpdateTextStyleRequest Structure
 
 ```typescript
 {
   updateTextStyle: {
-    objectId: string,
+    objectId: string,          // ID of shape containing text
     textRange: {
-      type: 'FIXED_RANGE' | 'ALL',
-      startIndex?: number,
-      endIndex?: number
+      type: 'FIXED_RANGE' | 'FROM_START_INDEX' | 'ALL',
+      startIndex?: number,     // Required for FIXED_RANGE and FROM_START_INDEX
+      endIndex?: number        // Required for FIXED_RANGE only
     },
     style: {
       fontFamily?: string,
       fontSize?: { magnitude: number, unit: 'PT' },
       bold?: boolean,
       italic?: boolean,
-      foregroundColor?: { rgbColor: { red, green, blue } },
-      // ... other fields
+      underline?: boolean,
+      strikethrough?: boolean,
+      smallCaps?: boolean,
+      foregroundColor?: {
+        opaqueColor: {
+          rgbColor: { red: number, green: number, blue: number }  // Values 0.0-1.0
+        }
+      },
+      backgroundColor?: {
+        opaqueColor: {
+          rgbColor: { red: number, green: number, blue: number }
+        }
+      },
+      link?: {
+        url: string            // Creates a hyperlink
+      },
+      baselineOffset?: 'NONE' | 'SUPERSCRIPT' | 'SUBSCRIPT',
+      weightedFontFamily?: {
+        fontFamily: string,
+        weight: number         // 100-900
+      }
     },
-    fields: string  // Field mask, e.g., "bold,foregroundColor"
+    fields: string             // Field mask, e.g., "bold,foregroundColor"
   }
 }
 ```
+
+**Important:** The `fields` parameter is required and specifies which style properties to update. Only listed fields will be modified; others remain unchanged.
 
 ---
 

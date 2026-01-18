@@ -75,21 +75,49 @@ interface Position {
 
 ### 3.2 ShapeType
 
-Available shape types.
+Available shape types. The Google Slides API supports many shape types; here are the most commonly used:
 
 ```typescript
 type ShapeType =
+  // Basic shapes
   | 'RECTANGLE'
   | 'ROUND_RECTANGLE'
   | 'ELLIPSE'
   | 'TRIANGLE'
+  | 'PARALLELOGRAM'
+  | 'TRAPEZOID'
+  | 'PENTAGON'
+  | 'HEXAGON'
+  | 'DIAMOND'
+  // Arrows
   | 'RIGHT_ARROW'
   | 'LEFT_ARROW'
   | 'UP_ARROW'
   | 'DOWN_ARROW'
+  | 'LEFT_RIGHT_ARROW'
+  | 'UP_DOWN_ARROW'
+  | 'BENT_ARROW'
+  | 'CURVED_RIGHT_ARROW'
+  // Stars and banners
+  | 'STAR_4'
   | 'STAR_5'
-  | 'CALLOUT_RECTANGLE';
+  | 'STAR_6'
+  | 'STAR_8'
+  | 'RIBBON'
+  | 'RIBBON_2'
+  // Callouts
+  | 'CALLOUT_RECTANGLE'
+  | 'CALLOUT_ROUND_RECTANGLE'
+  | 'CALLOUT_ELLIPSE'
+  // Special
+  | 'TEXT_BOX'            // For creating text boxes
+  | 'CLOUD'
+  | 'HEART'
+  | 'PLUS'
+  | 'WAVE';
 ```
+
+**Note:** Use `TEXT_BOX` as the shapeType when creating text boxes for arbitrary text placement.
 
 ### 3.3 TableData
 
@@ -394,8 +422,8 @@ interface TableData {
 
 **Notes:**
 - Speaker notes appear in presenter view
-- Supports basic text; no rich formatting in v1
-- Replaces any existing notes on the slide
+- Supports basic text; rich formatting can be applied with UpdateTextStyleRequest
+- To replace existing notes, delete existing text first with DeleteTextRequest
 
 ---
 
@@ -406,20 +434,35 @@ interface TableData {
 | MCP Tool | Google API Request(s) |
 |----------|----------------------|
 | insert_text (placeholder) | InsertTextRequest |
-| insert_text (text box) | CreateShapeRequest + InsertTextRequest |
+| insert_text (text box) | CreateShapeRequest (shapeType: TEXT_BOX) + InsertTextRequest |
 | insert_image | CreateImageRequest |
 | create_shape | CreateShapeRequest |
 | create_table | CreateTableRequest + InsertTextRequest (for each cell) |
-| set_speaker_notes | InsertTextRequest (to notes page shape) |
+| set_speaker_notes | InsertTextRequest (to speaker notes shape) |
+
+### Speaker Notes Implementation
+
+Each slide has an associated notes page with a speaker notes shape. To modify speaker notes:
+
+1. **Find the notes shape ID**: Get the slide and access `slideProperties.notesPage.notesProperties.speakerNotesObjectId`
+2. **Insert text**: Use InsertTextRequest targeting the speaker notes object ID
+3. **Clear existing notes**: Use DeleteTextRequest with textRange type `ALL` before inserting
+
+```typescript
+// Finding speaker notes shape ID
+const slide = presentation.slides[index];
+const notesShapeId = slide.slideProperties.notesPage.notesProperties.speakerNotesObjectId;
+```
 
 ### CreateImageRequest Structure
 
 ```typescript
 {
   createImage: {
-    url: string,
+    objectId?: string,        // Optional custom ID for the image
+    url: string,              // Must be publicly accessible HTTPS URL
     elementProperties: {
-      pageObjectId: string,  // slide ID
+      pageObjectId: string,   // Slide ID where image will be placed
       size: {
         width: { magnitude: number, unit: 'EMU' },
         height: { magnitude: number, unit: 'EMU' }
@@ -427,13 +470,20 @@ interface TableData {
       transform: {
         scaleX: 1,
         scaleY: 1,
-        translateX: number,  // EMU
-        translateY: number   // EMU
+        translateX: number,   // EMU - horizontal position
+        translateY: number,   // EMU - vertical position
+        unit: 'EMU'
       }
     }
   }
 }
 ```
+
+**Image URL Requirements:**
+- Must be publicly accessible (no authentication required)
+- HTTPS recommended
+- Google fetches and caches the image; original URL is not stored
+- Supported formats: PNG, JPEG, GIF, BMP, WEBP
 
 ---
 
@@ -482,5 +532,24 @@ Default Google Slides page size:
 
 ## 9. Open Questions
 
-- [ ] Should we support replacing placeholder content vs. appending?
-- [ ] Should image URLs be validated before sending to the API?
+- [x] Should we support replacing placeholder content vs. appending? → **Support both: use DeleteTextRequest to clear before InsertTextRequest for replace behavior**
+- [x] Should image URLs be validated before sending to the API? → **No, let the API handle validation. It provides clear error messages for invalid URLs.**
+
+---
+
+## 10. Additional Request Types
+
+These batchUpdate request types may be useful for advanced content operations:
+
+| Request | Purpose |
+|---------|---------|
+| DeleteTextRequest | Remove text from a range |
+| ReplaceAllTextRequest | Find and replace text across presentation |
+| UpdatePageElementTransformRequest | Move, resize, or rotate elements |
+| UpdateShapePropertiesRequest | Change shape fill, outline, shadow |
+| UpdateImagePropertiesRequest | Adjust image properties like contrast |
+| InsertTableRowsRequest | Add rows to existing table |
+| InsertTableColumnsRequest | Add columns to existing table |
+| DeleteTableRowRequest | Remove table rows |
+| DeleteTableColumnRequest | Remove table columns |
+| MergeTableCellsRequest | Combine adjacent cells |

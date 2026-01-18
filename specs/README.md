@@ -6,6 +6,8 @@ Design documentation for an MCP server that enables LLMs to create and manage Go
 
 This directory contains specifications for the project's features and systems. Each spec describes the design intent, architecture, and implementation guidance for a specific concern.
 
+**Spec Revision:** 1.1 (January 2026) - Updated with accurate Google Slides API details
+
 **Status Legend:**
 - **Planned** - Design complete, not yet implemented
 - **In Progress** - Currently being implemented
@@ -56,6 +58,17 @@ Specs are living documents. Update them when:
 - Implementation reveals a better approach
 - Requirements change
 - New edge cases are discovered
+
+---
+
+## API Reference
+
+These specifications were developed using the official Google Slides API documentation:
+
+- [Google Slides API Overview](https://developers.google.com/workspace/slides/api/guides/overview)
+- [batchUpdate Reference](https://developers.google.com/workspace/slides/api/reference/rest/v1/presentations/batchUpdate)
+- [Request Types](https://developers.google.com/workspace/slides/api/reference/rest/v1/presentations/request)
+- [OAuth 2.0 for Desktop Apps](https://developers.google.com/identity/protocols/oauth2/native-app)
 
 ---
 
