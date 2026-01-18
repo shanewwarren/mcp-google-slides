@@ -25,6 +25,7 @@ import {
   reorderSlides,
   contentTools,
   insertText,
+  insertImage,
 } from './tools/index.js';
 
 /**
@@ -91,6 +92,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'insert_text':
         result = await insertText(args as any);
+        break;
+
+      case 'insert_image':
+        result = await insertImage(args as any);
         break;
 
       default:

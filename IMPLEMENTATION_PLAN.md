@@ -361,7 +361,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 6: Content Insertion Tools
 
-**Status:** In Progress (1/6 tools complete)
+**Status:** In Progress (2/5 tools complete)
 **Dependencies:** Priority 5 (Slide tools), Priority 3 (Utilities)
 **Blocking:** None
 
@@ -385,7 +385,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Position in inches, convert to EMU
   - **Note:** Completed as part of the insert_text tool implementation above. Both modes (placeholder and text box) are handled by a single unified tool.
 
-- [ ] **Implement insert_image tool** (refs: specs/content-insertion.md)
+- [x] **Implement insert_image tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils
   - Complexity: Medium
   - File: `src/tools/content/insert-image.ts`
@@ -393,6 +393,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Output: `{ imageId, actualSize }`
   - API: `batchUpdate()` with `CreateImageRequest`
   - URL requirements: Publicly accessible, HTTPS recommended
+  - **Note:** Implemented with URL validation using Zod schema, proper EMU conversion for positioning and sizing. Returns image ID and specified dimensions. Registered with MCP server in src/index.ts.
 
 - [ ] **Implement create_shape tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils, color utils
