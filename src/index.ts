@@ -23,6 +23,8 @@ import {
   getSlide,
   deleteSlide,
   reorderSlides,
+  contentTools,
+  insertText,
 } from './tools/index.js';
 
 /**
@@ -45,7 +47,7 @@ const server = new Server(
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [...presentationTools, ...slideTools],
+    tools: [...presentationTools, ...slideTools, ...contentTools],
   };
 });
 
@@ -85,6 +87,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'reorder_slides':
         result = await reorderSlides(args as any);
+        break;
+
+      case 'insert_text':
+        result = await insertText(args as any);
         break;
 
       default:

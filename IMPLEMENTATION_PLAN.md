@@ -361,27 +361,29 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 6: Content Insertion Tools
 
-**Status:** Not started
+**Status:** In Progress (1/6 tools complete)
 **Dependencies:** Priority 5 (Slide tools), Priority 3 (Utilities)
 **Blocking:** None
 
 ### Tasks
 
-- [ ] **Implement insert_text tool - placeholders** (refs: specs/content-insertion.md)
+- [x] **Implement insert_text tool - placeholders** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, slide tools
   - Complexity: Medium
   - File: `src/tools/content/insert-text.ts`
   - Input: `{ presentationId, slideId, text, placeholderId }`
   - API: `batchUpdate()` with `InsertTextRequest`
   - Target: Existing placeholder shape
+  - **Note:** Implemented with support for both placeholder and text box modes in a single tool. Includes Zod schema validation and proper EMU conversion for text box positioning. Registered with MCP server.
 
-- [ ] **Implement insert_text tool - text boxes** (refs: specs/content-insertion.md)
+- [x] **Implement insert_text tool - text boxes** (refs: specs/content-insertion.md)
   - Dependencies: insert_text (placeholders), EMU utils
   - Complexity: Medium
   - File: `src/tools/content/insert-text.ts` (extend)
   - Input: `{ presentationId, slideId, text, position }`
   - API: `batchUpdate()` with `CreateShapeRequest` (TEXT_BOX) + `InsertTextRequest`
   - Position in inches, convert to EMU
+  - **Note:** Completed as part of the insert_text tool implementation above. Both modes (placeholder and text box) are handled by a single unified tool.
 
 - [ ] **Implement insert_image tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils
@@ -421,12 +423,13 @@ This project is in the **specification-complete, pre-implementation** phase. All
     2. `DeleteTextRequest` to clear existing notes
     3. `InsertTextRequest` to add new notes
 
-- [ ] **Register content tools with MCP server** (refs: specs/content-insertion.md)
+- [x] **Register content tools with MCP server** (refs: specs/content-insertion.md)
   - Dependencies: All 5 content tools
   - Complexity: Low
   - File: `src/tools/content/index.ts`
   - Export tool definitions
   - Add Zod schemas for input validation
+  - **Note:** Created content tools index and registered insert_text tool with MCP server. Content tools are now exported from main tools/index.ts and registered in src/index.ts. Will be extended as more content tools are implemented.
 
 ---
 
