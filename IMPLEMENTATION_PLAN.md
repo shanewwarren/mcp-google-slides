@@ -192,7 +192,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 3: Utility Functions
 
-**Status:** Not started
+**Status:** ✅ Complete
 **Dependencies:** Priority 0 (Project Foundation)
 **Blocking:** Content and formatting tools
 
@@ -212,7 +212,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
     - `pointsToEmu(points: number): number`
   - **Note:** Also implemented reverse conversion functions (`emuToInches`, `emuToPoints`, `emuToCm`) and `cmToEmu`/`emuToCm` functions for completeness. All conversions use `Math.round()` to ensure integer EMU values.
 
-- [ ] **Implement color parsing utilities** (refs: specs/text-formatting.md)
+- [x] **Implement color parsing utilities** (refs: specs/text-formatting.md)
   - Dependencies: None (pure functions)
   - Complexity: Medium
   - File: `src/utils/colors.ts`
@@ -223,6 +223,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
     - Named colors: `red`, `blue`, etc.
   - Function: `parseColor(input: string): RgbColor`
   - Output: `{ red: 0-1, green: 0-1, blue: 0-1 }`
+  - **Note:** Implemented comprehensive color parsing with support for all specified formats. Added additional helper functions: `parseHexColor()`, `parseRgbColor()`, `parseNamedColor()`, `toHexColor()`, and `getSupportedColorNames()`. Includes 40+ named colors and custom `ColorParseError` exception for invalid inputs. Also created `src/utils/index.ts` to export all utility functions (both EMU and color utilities).
 
 - [ ] **Create layout type definitions** (refs: specs/slide-operations.md)
   - Dependencies: None
@@ -242,11 +243,12 @@ This project is in the **specification-complete, pre-implementation** phase. All
     - `StoredTokens` - OAuth token structure
     - `PresentationSummary` - List result item
 
-- [ ] **Create utility exports** (refs: all specs)
+- [x] **Create utility exports** (refs: all specs)
   - Dependencies: All utilities
   - Complexity: Low
   - File: `src/utils/index.ts`
   - Export all utility functions
+  - **Note:** Created during color utilities implementation. Exports both EMU conversion utilities and color parsing utilities.
 
 ---
 
