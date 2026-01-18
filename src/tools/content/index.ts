@@ -28,11 +28,17 @@ import {
   type CreateTableInput,
   type CreateTableOutput,
 } from './create-table.js';
+import {
+  setSpeakerNotes,
+  SetSpeakerNotesInputSchema,
+  type SetSpeakerNotesInput,
+  type SetSpeakerNotesOutput,
+} from './set-speaker-notes.js';
 
 /**
  * Export all content tool implementations
  */
-export { insertText, insertImage, createShape, createTable };
+export { insertText, insertImage, createShape, createTable, setSpeakerNotes };
 
 /**
  * Export all content tool types
@@ -46,6 +52,8 @@ export type {
   CreateShapeOutput,
   CreateTableInput,
   CreateTableOutput,
+  SetSpeakerNotesInput,
+  SetSpeakerNotesOutput,
 };
 
 /**
@@ -56,6 +64,7 @@ export {
   InsertImageInputSchema,
   CreateShapeInputSchema,
   CreateTableInputSchema,
+  SetSpeakerNotesInputSchema,
 };
 
 /**
@@ -255,6 +264,28 @@ export const contentTools = [
         },
       },
       required: ['presentationId', 'slideId', 'rows', 'columns', 'position'],
+    },
+  },
+  {
+    name: 'set_speaker_notes',
+    description: 'Add or update speaker notes for a slide',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideId: {
+          type: 'string',
+          description: 'The slide to add notes to',
+        },
+        notes: {
+          type: 'string',
+          description: 'The speaker notes content (plain text or simple formatting)',
+        },
+      },
+      required: ['presentationId', 'slideId', 'notes'],
     },
   },
 ] as const;

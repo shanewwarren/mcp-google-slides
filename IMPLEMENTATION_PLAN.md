@@ -1,25 +1,25 @@
 # Implementation Plan: MCP Google Slides
 
 **Generated:** 2026-01-17 (Updated)
-**Status:** Core features complete (11/16 tools), formatting tools remaining
+**Status:** Core features complete (12/16 tools), formatting tools remaining
 **Based on:** specs/*.md (6 specification files)
 
 ---
 
 ## Executive Summary
 
-This project is in **active development** with core infrastructure and 11 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories are complete. Remaining work focuses on formatting tools (3 tools) and additional content tools (1 tool).
+This project is in **active development** with core infrastructure and 12 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories (presentations, slides, content) are complete. Remaining work focuses on formatting tools (4 tools).
 
 ### Gap Analysis
 - **Specifications:** ✅ 6/6 complete
-- **Source Code:** ✅ 69% implemented (11/16 tools)
-- **Tools:** ✅ 11/16 implemented
+- **Source Code:** ✅ 75% implemented (12/16 tools)
+- **Tools:** ✅ 12/16 implemented
 - **Infrastructure:** ✅ Complete (auth, clients, utilities, MCP server)
 
 ### Implementation Statistics
 - **Total MCP Tools:** 16 (specifications)
-- **Implemented Tools:** 11 (presentations: 3, slides: 4, content: 4)
-- **Remaining Tools:** 5 (content: 1, formatting: 3)
+- **Implemented Tools:** 12 (presentations: 3, slides: 4, content: 5)
+- **Remaining Tools:** 4 (formatting: 4)
 - **Total Components:** ~40 files across 6 modules
 - **External APIs:** Google Slides API, Google Drive API, Google OAuth 2.0
 
@@ -29,46 +29,32 @@ This project is in **active development** with core infrastructure and 11 of 16 
 
 Based on the current implementation state, here are the prioritized remaining tasks:
 
-### Phase 1: Complete Content Tools (Priority: HIGH)
-**Estimated Effort:** 1-2 days
-**Impact:** Completes content insertion capabilities
-
-1. **create_table** - Add data tables to slides
-   - File: `src/tools/content/create-table.ts`
-   - Uses CreateTableRequest + optional cell population
-   - Moderate complexity (batch updates for cell text)
-
-2. **set_speaker_notes** - Add presenter notes to slides
-   - File: `src/tools/content/set-speaker-notes.ts`
-   - Uses DeleteTextRequest + InsertTextRequest pattern
-   - Low complexity (similar to insert_text)
-
-### Phase 2: Implement Formatting Tools (Priority: HIGH)
+### Phase 1: Implement Formatting Tools (Priority: HIGH)
 **Estimated Effort:** 3-4 days
 **Impact:** Enables text styling and professional formatting
 
-3. **format_text** - Character-level styling
+1. **format_text** - Character-level styling
    - File: `src/tools/formatting/format-text.ts`
    - High complexity (field masks, text ranges, color parsing)
    - Most important formatting tool
 
-4. **format_paragraph** - Paragraph-level formatting
+2. **format_paragraph** - Paragraph-level formatting
    - File: `src/tools/formatting/format-paragraph.ts`
    - Medium complexity (alignment, spacing, indentation)
    - Essential for professional presentations
 
-5. **create_bullets** - List creation
+3. **create_bullets** - List creation
    - File: `src/tools/formatting/create-bullets.ts`
    - Medium complexity (11 bullet presets)
    - High-value feature for content creation
 
-### Phase 3: Testing & Documentation (Priority: MEDIUM)
+### Phase 2: Testing & Documentation (Priority: MEDIUM)
 **Estimated Effort:** 2-3 days
 **Impact:** Production readiness
 
-6. Integration tests for new tools
-7. Update README with usage examples
-8. End-to-end testing of all 16 tools
+1. Integration tests for new tools
+2. Update README with usage examples
+3. End-to-end testing of all 16 tools
 
 ### Success Criteria
 - ✅ All 16 tools from specifications implemented
@@ -415,8 +401,8 @@ Based on the current implementation state, here are the prioritized remaining ta
 
 ## Priority 6: Content Insertion Tools
 
-**Status:** ✅ Complete (4/5 implemented) + 1 remaining
-**Dependencies:** Priority 5 (Slide tools), Priority 3 (Utilities)
+**Status:** ✅ Complete (5/5 implemented)
+**Dependencies:** Priority 5 (Slide tools) ✅, Priority 3 (Utilities) ✅
 **Blocking:** None
 
 ### Completed Tasks ✅
@@ -465,9 +451,7 @@ Based on the current implementation state, here are the prioritized remaining ta
   - File: `src/tools/content/index.ts`
   - Export tool definitions
   - Add Zod schemas for input validation
-  - **Note:** ✅ All implemented content tools (insert_text, insert_image, create_shape) are registered with MCP server. Content tools index exports all tools and schemas.
-
-### Remaining Tasks 🔄
+  - **Note:** ✅ All implemented content tools (insert_text, insert_image, create_shape, create_table, set_speaker_notes) are registered with MCP server. Content tools index exports all tools and schemas.
 
 - [x] **Implement create_table tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client ✅, EMU utils ✅
@@ -479,16 +463,17 @@ Based on the current implementation state, here are the prioritized remaining ta
   - Optional: Populate cells with data array
   - **Note:** ✅ Implemented with full support for creating tables (1-25 rows, 1-20 columns) with optional data population. Includes Zod schema validation for dimensions and data validation to ensure data array matches table dimensions. Uses batch updates to create table and populate all cells in a single API call. Registered with MCP server in src/index.ts.
 
-- [ ] **Implement set_speaker_notes tool** (refs: specs/content-insertion.md)
-  - Dependencies: Slides API client, get_slide tool
+- [x] **Implement set_speaker_notes tool** (refs: specs/content-insertion.md)
+  - Dependencies: Slides API client ✅, get_slide tool ✅
   - Complexity: Medium
-  - File: `src/tools/content/set-speaker-notes.ts`
+  - File: `src/tools/content/set-speaker-notes.ts` ✅
   - Input: `{ presentationId, slideId, notes }`
   - Output: `{ updated: true }`
   - Implementation:
     1. Get slide to find `speakerNotesObjectId`
     2. `DeleteTextRequest` to clear existing notes
     3. `InsertTextRequest` to add new notes
+  - **Note:** ✅ Implemented with full support for setting speaker notes. Uses SlidesClient.getSlide() to retrieve the speaker notes object ID from slide.slideProperties.notesPage.notesProperties.speakerNotesObjectId. Clears existing notes with DeleteTextRequest and adds new notes with InsertTextRequest in a single batch update. Includes custom SpeakerNotesNotFoundError for error handling. Registered with MCP server in src/index.ts.
 
 ---
 
@@ -835,15 +820,15 @@ Based on the current implementation state, here are the prioritized remaining ta
 - [x] insert_image ✅
 - [x] create_shape ✅
 - [x] create_table ✅
-- [ ] set_speaker_notes 🔄
+- [x] set_speaker_notes ✅
 
 **Text Formatting:**
 - [ ] format_text 🔄
 - [ ] format_paragraph 🔄
 - [ ] create_bullets 🔄
 
-**TOTAL: 11/16 tools implemented (69%)**
-**Remaining: 5 tools (1 content + 3 formatting + 1 removed from original count)**
+**TOTAL: 12/16 tools implemented (75%)**
+**Remaining: 4 tools (formatting: 4)**
 
 ---
 

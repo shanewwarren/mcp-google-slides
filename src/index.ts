@@ -28,6 +28,7 @@ import {
   insertImage,
   createShape,
   createTable,
+  setSpeakerNotes,
 } from './tools/index.js';
 
 /**
@@ -106,6 +107,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'create_table':
         result = await createTable(args as any);
+        break;
+
+      case 'set_speaker_notes':
+        result = await setSpeakerNotes(args as any);
         break;
 
       default:
