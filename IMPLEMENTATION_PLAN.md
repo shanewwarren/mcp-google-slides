@@ -545,17 +545,19 @@ Based on the current implementation state, here are the prioritized remaining ta
 
 ### Tasks
 
-- [ ] **Set up testing framework**
+- [x] **Set up testing framework**
   - Complexity: Low
   - Install Jest or Vitest
   - Configure test runner
   - Add test scripts to package.json
+  - **Note:** Jest was already configured during project setup with proper ESM support and test scripts.
 
-- [ ] **Write unit tests for utilities**
+- [x] **Write unit tests for utilities**
   - Complexity: Low
   - Test EMU conversions
   - Test color parsing (all formats)
   - Test type definitions
+  - **Note:** Implemented comprehensive unit tests for EMU conversion utilities (tests/utils/emu.test.ts) with 40+ tests covering all conversion functions, edge cases, round-trip conversions, and cross-unit verification. Implemented comprehensive unit tests for color parsing utilities (tests/utils/colors.test.ts) with 60+ tests covering hex (6-digit and 3-digit), RGB, named colors, round-trip conversions, and error cases. All 102 tests pass.
 
 - [ ] **Write integration tests for OAuth flow**
   - Complexity: High
