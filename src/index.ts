@@ -26,6 +26,7 @@ import {
   contentTools,
   insertText,
   insertImage,
+  createShape,
 } from './tools/index.js';
 
 /**
@@ -96,6 +97,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'insert_image':
         result = await insertImage(args as any);
+        break;
+
+      case 'create_shape':
+        result = await createShape(args as any);
         break;
 
       default:

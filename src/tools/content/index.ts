@@ -16,21 +16,34 @@ import {
   type InsertImageInput,
   type InsertImageOutput,
 } from './insert-image.js';
+import {
+  createShape,
+  CreateShapeInputSchema,
+  type CreateShapeInput,
+  type CreateShapeOutput,
+} from './create-shape.js';
 
 /**
  * Export all content tool implementations
  */
-export { insertText, insertImage };
+export { insertText, insertImage, createShape };
 
 /**
  * Export all content tool types
  */
-export type { InsertTextInput, InsertTextOutput, InsertImageInput, InsertImageOutput };
+export type {
+  InsertTextInput,
+  InsertTextOutput,
+  InsertImageInput,
+  InsertImageOutput,
+  CreateShapeInput,
+  CreateShapeOutput,
+};
 
 /**
  * Export all content tool schemas
  */
-export { InsertTextInputSchema, InsertImageInputSchema };
+export { InsertTextInputSchema, InsertImageInputSchema, CreateShapeInputSchema };
 
 /**
  * MCP tool definitions for content insertion
@@ -110,6 +123,80 @@ export const contentTools = [
         },
       },
       required: ['presentationId', 'slideId', 'imageUrl', 'position'],
+    },
+  },
+  {
+    name: 'create_shape',
+    description: 'Create a shape on a slide',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideId: {
+          type: 'string',
+          description: 'The slide to add the shape to',
+        },
+        shapeType: {
+          type: 'string',
+          enum: [
+            'RECTANGLE',
+            'ROUND_RECTANGLE',
+            'ELLIPSE',
+            'TRIANGLE',
+            'PARALLELOGRAM',
+            'TRAPEZOID',
+            'PENTAGON',
+            'HEXAGON',
+            'DIAMOND',
+            'RIGHT_ARROW',
+            'LEFT_ARROW',
+            'UP_ARROW',
+            'DOWN_ARROW',
+            'LEFT_RIGHT_ARROW',
+            'UP_DOWN_ARROW',
+            'BENT_ARROW',
+            'CURVED_RIGHT_ARROW',
+            'STAR_4',
+            'STAR_5',
+            'STAR_6',
+            'STAR_8',
+            'RIBBON',
+            'RIBBON_2',
+            'CALLOUT_RECTANGLE',
+            'CALLOUT_ROUND_RECTANGLE',
+            'CALLOUT_ELLIPSE',
+            'TEXT_BOX',
+            'CLOUD',
+            'HEART',
+            'PLUS',
+            'WAVE',
+          ],
+          description: 'The type of shape to create',
+        },
+        position: {
+          type: 'object',
+          description: 'Position and size for the shape',
+          properties: {
+            x: { type: 'number', description: 'Left edge in inches' },
+            y: { type: 'number', description: 'Top edge in inches' },
+            width: { type: 'number', description: 'Width in inches' },
+            height: { type: 'number', description: 'Height in inches' },
+          },
+          required: ['x', 'y', 'width', 'height'],
+        },
+        fillColor: {
+          type: 'string',
+          description: "Fill color as hex (e.g., '#FF5733') or color name",
+        },
+        text: {
+          type: 'string',
+          description: 'Optional text to place inside the shape',
+        },
+      },
+      required: ['presentationId', 'slideId', 'shapeType', 'position'],
     },
   },
 ] as const;

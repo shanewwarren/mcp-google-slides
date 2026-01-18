@@ -1,26 +1,80 @@
 # Implementation Plan: MCP Google Slides
 
-**Generated:** 2026-01-17
-**Status:** Complete specification, zero implementation
-**Based on:** specs/*.md (5 specification files)
+**Generated:** 2026-01-17 (Updated)
+**Status:** Core features complete (10/16 tools), formatting tools remaining
+**Based on:** specs/*.md (6 specification files)
 
 ---
 
 ## Executive Summary
 
-This project is in the **specification-complete, pre-implementation** phase. All 5 specifications are well-defined and marked as "Planned" status. No source code (`src/`) or package configuration (`package.json`) exists yet.
+This project is in **active development** with core infrastructure and 10 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories are complete. Remaining work focuses on formatting tools (4 tools) and additional content tools (2 tools).
 
 ### Gap Analysis
-- **Specifications:** ✅ 5/5 complete
-- **Source Code:** ❌ 0% implemented
-- **Tools:** ❌ 0/14 implemented
-- **Infrastructure:** ❌ Not started (no package.json, tsconfig, etc.)
+- **Specifications:** ✅ 6/6 complete
+- **Source Code:** ✅ 63% implemented (10/16 tools)
+- **Tools:** ✅ 10/16 implemented
+- **Infrastructure:** ✅ Complete (auth, clients, utilities, MCP server)
 
 ### Implementation Statistics
-- **Total MCP Tools to Build:** 14
-- **Total Components:** ~25 files across 5 modules
+- **Total MCP Tools:** 16 (specifications)
+- **Implemented Tools:** 10 (presentations: 3, slides: 4, content: 3)
+- **Remaining Tools:** 6 (content: 2, formatting: 4)
+- **Total Components:** ~40 files across 6 modules
 - **External APIs:** Google Slides API, Google Drive API, Google OAuth 2.0
-- **Estimated Tasks:** 45+ discrete implementation tasks
+
+---
+
+## 🎯 Immediate Next Steps (January 2026)
+
+Based on the current implementation state, here are the prioritized remaining tasks:
+
+### Phase 1: Complete Content Tools (Priority: HIGH)
+**Estimated Effort:** 1-2 days
+**Impact:** Completes content insertion capabilities
+
+1. **create_table** - Add data tables to slides
+   - File: `src/tools/content/create-table.ts`
+   - Uses CreateTableRequest + optional cell population
+   - Moderate complexity (batch updates for cell text)
+
+2. **set_speaker_notes** - Add presenter notes to slides
+   - File: `src/tools/content/set-speaker-notes.ts`
+   - Uses DeleteTextRequest + InsertTextRequest pattern
+   - Low complexity (similar to insert_text)
+
+### Phase 2: Implement Formatting Tools (Priority: HIGH)
+**Estimated Effort:** 3-4 days
+**Impact:** Enables text styling and professional formatting
+
+3. **format_text** - Character-level styling
+   - File: `src/tools/formatting/format-text.ts`
+   - High complexity (field masks, text ranges, color parsing)
+   - Most important formatting tool
+
+4. **format_paragraph** - Paragraph-level formatting
+   - File: `src/tools/formatting/format-paragraph.ts`
+   - Medium complexity (alignment, spacing, indentation)
+   - Essential for professional presentations
+
+5. **create_bullets** - List creation
+   - File: `src/tools/formatting/create-bullets.ts`
+   - Medium complexity (11 bullet presets)
+   - High-value feature for content creation
+
+### Phase 3: Testing & Documentation (Priority: MEDIUM)
+**Estimated Effort:** 2-3 days
+**Impact:** Production readiness
+
+6. Integration tests for new tools
+7. Update README with usage examples
+8. End-to-end testing of all 16 tools
+
+### Success Criteria
+- ✅ All 16 tools from specifications implemented
+- ✅ Comprehensive Zod validation for all inputs
+- ✅ Integration tests for all tools
+- ✅ Updated documentation with examples
 
 ---
 
@@ -361,11 +415,11 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 6: Content Insertion Tools
 
-**Status:** In Progress (2/5 tools complete)
+**Status:** ✅ Complete (3/3 implemented) + 2 remaining
 **Dependencies:** Priority 5 (Slide tools), Priority 3 (Utilities)
 **Blocking:** None
 
-### Tasks
+### Completed Tasks ✅
 
 - [x] **Implement insert_text tool - placeholders** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, slide tools
@@ -374,7 +428,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Input: `{ presentationId, slideId, text, placeholderId }`
   - API: `batchUpdate()` with `InsertTextRequest`
   - Target: Existing placeholder shape
-  - **Note:** Implemented with support for both placeholder and text box modes in a single tool. Includes Zod schema validation and proper EMU conversion for text box positioning. Registered with MCP server.
+  - **Note:** ✅ Implemented with support for both placeholder and text box modes in a single tool. Includes Zod schema validation and proper EMU conversion for text box positioning. Registered with MCP server.
 
 - [x] **Implement insert_text tool - text boxes** (refs: specs/content-insertion.md)
   - Dependencies: insert_text (placeholders), EMU utils
@@ -383,7 +437,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Input: `{ presentationId, slideId, text, position }`
   - API: `batchUpdate()` with `CreateShapeRequest` (TEXT_BOX) + `InsertTextRequest`
   - Position in inches, convert to EMU
-  - **Note:** Completed as part of the insert_text tool implementation above. Both modes (placeholder and text box) are handled by a single unified tool.
+  - **Note:** ✅ Completed as part of the insert_text tool implementation above. Both modes (placeholder and text box) are handled by a single unified tool.
 
 - [x] **Implement insert_image tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils
@@ -393,9 +447,9 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Output: `{ imageId, actualSize }`
   - API: `batchUpdate()` with `CreateImageRequest`
   - URL requirements: Publicly accessible, HTTPS recommended
-  - **Note:** Implemented with URL validation using Zod schema, proper EMU conversion for positioning and sizing. Returns image ID and specified dimensions. Registered with MCP server in src/index.ts.
+  - **Note:** ✅ Implemented with URL validation using Zod schema, proper EMU conversion for positioning and sizing. Returns image ID and specified dimensions. Registered with MCP server in src/index.ts.
 
-- [ ] **Implement create_shape tool** (refs: specs/content-insertion.md)
+- [x] **Implement create_shape tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils, color utils
   - Complexity: Medium
   - File: `src/tools/content/create-shape.ts`
@@ -403,6 +457,17 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Output: `{ shapeId }`
   - API: `batchUpdate()` with `CreateShapeRequest`
   - Support 30+ shape types (from ShapeType enum)
+  - **Note:** ✅ Implemented with full support for 30 shape types, optional fill color (hex/RGB/named), and optional text insertion. Batch updates used for color + text. Registered with MCP server.
+
+- [x] **Register content tools with MCP server** (refs: specs/content-insertion.md)
+  - Dependencies: All content tools
+  - Complexity: Low
+  - File: `src/tools/content/index.ts`
+  - Export tool definitions
+  - Add Zod schemas for input validation
+  - **Note:** ✅ All implemented content tools (insert_text, insert_image, create_shape) are registered with MCP server. Content tools index exports all tools and schemas.
+
+### Remaining Tasks 🔄
 
 - [ ] **Implement create_table tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, EMU utils
@@ -424,80 +489,74 @@ This project is in the **specification-complete, pre-implementation** phase. All
     2. `DeleteTextRequest` to clear existing notes
     3. `InsertTextRequest` to add new notes
 
-- [x] **Register content tools with MCP server** (refs: specs/content-insertion.md)
-  - Dependencies: All 5 content tools
-  - Complexity: Low
-  - File: `src/tools/content/index.ts`
-  - Export tool definitions
-  - Add Zod schemas for input validation
-  - **Note:** Created content tools index and registered insert_text tool with MCP server. Content tools are now exported from main tools/index.ts and registered in src/index.ts. Will be extended as more content tools are implemented.
-
 ---
 
 ## Priority 7: Text Formatting Tools
 
-**Status:** Not started
-**Dependencies:** Priority 6 (Content tools), Priority 3 (Color utils)
+**Status:** ❌ Not started (0/4 tools)
+**Dependencies:** Priority 6 (Content tools) ✅, Priority 3 (Color utils) ✅
 **Blocking:** None
+
+**Note:** The `src/tools/formatting/` directory exists but is currently empty. This is the primary remaining work.
 
 ### Tasks
 
-- [ ] **Implement format_text tool - basic styles** (refs: specs/text-formatting.md)
-  - Dependencies: Slides API client
-  - Complexity: Medium
-  - File: `src/tools/formatting/format-text.ts`
-  - Input: `{ presentationId, objectId, style, range? }`
-  - Style properties: `bold`, `italic`, `underline`, `strikethrough`
+- [ ] **Implement format_text tool** (refs: specs/text-formatting.md)
+  - Dependencies: Slides API client ✅, Color utils ✅
+  - Complexity: High
+  - File: `src/tools/formatting/format-text.ts` (new)
+  - Input: `{ presentationId, slideId, elementId, textRange?, style }`
+  - Style properties (all optional):
+    - `fontFamily` (string)
+    - `fontSize` (number, points)
+    - `bold`, `italic`, `underline`, `strikethrough` (boolean)
+    - `foregroundColor`, `backgroundColor` (hex/RGB/named)
+    - `link` (URL string)
   - API: `batchUpdate()` with `UpdateTextStyleRequest`
-  - Field mask generation
-
-- [ ] **Implement format_text tool - fonts and colors** (refs: specs/text-formatting.md)
-  - Dependencies: format_text (basic), color utils
-  - Complexity: Medium
-  - File: `src/tools/formatting/format-text.ts` (extend)
-  - Style properties: `fontFamily`, `fontSize`, `foregroundColor`, `backgroundColor`
-  - Color parsing with color utils
-  - Common font families validation
-
-- [ ] **Implement format_text tool - links** (refs: specs/text-formatting.md)
-  - Dependencies: format_text (fonts/colors)
-  - Complexity: Low
-  - File: `src/tools/formatting/format-text.ts` (extend)
-  - Style property: `link` (URL)
-  - API: Same `UpdateTextStyleRequest`
+  - Field mask generation for partial updates
+  - TextRange: `{ type: 'ALL' } | { type: 'FIXED_RANGE', startIndex, endIndex }`
+  - Returns: styled character count
 
 - [ ] **Implement format_paragraph tool** (refs: specs/text-formatting.md)
-  - Dependencies: Slides API client, EMU utils
+  - Dependencies: Slides API client ✅, EMU utils ✅
   - Complexity: Medium
-  - File: `src/tools/formatting/format-paragraph.ts`
-  - Input: `{ presentationId, objectId, style, range? }`
-  - Style properties: `alignment`, `lineSpacing`, `spaceBefore`, `spaceAfter`, `indentStart`, `indentFirstLine`
+  - File: `src/tools/formatting/format-paragraph.ts` (new)
+  - Input: `{ presentationId, slideId, elementId, paragraphRange?, style }`
+  - Style properties (all optional):
+    - `alignment`: START, CENTER, END, JUSTIFIED
+    - `lineSpacing` (percentage: 100 = single, 150 = 1.5x)
+    - `spaceAbove`, `spaceBelow` (points → EMU)
+    - `indentStart`, `indentEnd`, `indentFirstLine` (points → EMU)
   - API: `batchUpdate()` with `UpdateParagraphStyleRequest`
-  - Alignment: `START`, `CENTER`, `END`, `JUSTIFIED`
+  - Returns: styled paragraph count
 
 - [ ] **Implement create_bullets tool** (refs: specs/text-formatting.md)
-  - Dependencies: Slides API client
+  - Dependencies: Slides API client ✅
   - Complexity: Medium
-  - File: `src/tools/formatting/create-bullets.ts`
-  - Input: `{ presentationId, objectId, bulletPreset?, range? }`
-  - Output: `{ applied: true }`
+  - File: `src/tools/formatting/create-bullets.ts` (new)
+  - Input: `{ presentationId, slideId, elementId, bulletPreset?, paragraphRange? }`
+  - Output: `{ applied: true, paragraphCount }`
   - API: `batchUpdate()` with `CreateParagraphBulletsRequest`
+  - Bullet presets (11 total):
+    - BULLET_DISC_CIRCLE_SQUARE
+    - BULLET_DIAMONDX_ARROW3D_SQUARE
+    - BULLET_CHECKBOX
+    - BULLET_ARROW_DIAMOND_DISC
+    - BULLET_STAR_CIRCLE_SQUARE
+    - NUMBERED_DIGIT_ALPHA_ROMAN
+    - NUMBERED_DIGIT_ALPHA_ROMAN_PARENS
+    - NUMBERED_DIGIT_NESTED
+    - NUMBERED_UPPERALPHA_ALPHA_ROMAN
+    - NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT
+    - NUMBERED_ZERODECIMAL_ALPHA_ROMAN
   - Default preset: `BULLET_DISC_CIRCLE_SQUARE`
-  - Support 9 bullet presets (3 bullet, 5 numbered, 1 checkbox)
 
-- [ ] **Implement remove_bullets tool** (refs: specs/text-formatting.md)
-  - Dependencies: Slides API client
+- [ ] **Create formatting tools index and register with MCP server** (refs: specs/text-formatting.md)
+  - Dependencies: All 3 formatting tools (or incremental)
   - Complexity: Low
-  - File: `src/tools/formatting/remove-bullets.ts`
-  - Input: `{ presentationId, objectId, range? }`
-  - Output: `{ removed: true }`
-  - API: `batchUpdate()` with `DeleteParagraphBulletsRequest`
-
-- [ ] **Register formatting tools with MCP server** (refs: specs/text-formatting.md)
-  - Dependencies: All 4 formatting tools
-  - Complexity: Low
-  - File: `src/tools/formatting/index.ts`
-  - Export tool definitions
+  - File: `src/tools/formatting/index.ts` (new)
+  - Export tool implementations, types, and schemas
+  - Update `src/index.ts` to register all formatting tools
   - Add Zod schemas for input validation
 
 ---
@@ -760,30 +819,30 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ### Tool Implementation Checklist
 **Presentation Management:**
-- [x] create_presentation
-- [x] get_presentation
-- [x] list_presentations
+- [x] create_presentation ✅
+- [x] get_presentation ✅
+- [x] list_presentations ✅
 
 **Slide Operations:**
-- [x] add_slide
-- [x] get_slide
-- [x] delete_slide
-- [x] reorder_slides
+- [x] add_slide ✅
+- [x] get_slide ✅
+- [x] delete_slide ✅
+- [x] reorder_slides ✅
 
 **Content Insertion:**
-- [ ] insert_text
-- [ ] insert_image
-- [ ] create_shape
-- [ ] create_table
-- [ ] set_speaker_notes
+- [x] insert_text ✅
+- [x] insert_image ✅
+- [x] create_shape ✅
+- [ ] create_table 🔄
+- [ ] set_speaker_notes 🔄
 
 **Text Formatting:**
-- [ ] format_text
-- [ ] format_paragraph
-- [ ] create_bullets
-- [ ] remove_bullets (not in initial spec count, added for completeness)
+- [ ] format_text 🔄
+- [ ] format_paragraph 🔄
+- [ ] create_bullets 🔄
 
-**TOTAL: 7/17 tools implemented (41%)**
+**TOTAL: 10/16 tools implemented (63%)**
+**Remaining: 6 tools (2 content + 3 formatting + 1 removed from original count)**
 
 ---
 
