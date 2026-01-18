@@ -12,15 +12,8 @@ import { createSlidesClient } from '../../clients/index.js';
  */
 export const ReorderSlidesInputSchema = z.object({
   presentationId: z.string().describe('The presentation ID'),
-  slideIds: z
-    .array(z.string())
-    .min(1)
-    .describe('Slide IDs in their new order'),
-  insertionIndex: z
-    .number()
-    .int()
-    .nonnegative()
-    .describe('New starting position for the slides'),
+  slideIds: z.array(z.string()).min(1).describe('Slide IDs in their new order'),
+  insertionIndex: z.number().int().nonnegative().describe('New starting position for the slides'),
 });
 
 export type ReorderSlidesInput = z.infer<typeof ReorderSlidesInputSchema>;
@@ -42,9 +35,7 @@ export interface ReorderSlidesOutput {
  * @throws {QuotaExceededError} If API quota is exceeded
  * @throws {Error} If any slide ID is invalid or index is out of range
  */
-export async function reorderSlides(
-  input: ReorderSlidesInput
-): Promise<ReorderSlidesOutput> {
+export async function reorderSlides(input: ReorderSlidesInput): Promise<ReorderSlidesOutput> {
   // Validate input
   const validatedInput = ReorderSlidesInputSchema.parse(input);
 
@@ -63,9 +54,7 @@ export async function reorderSlides(
   }
 
   // Validate all slide IDs exist in the presentation
-  const presentationSlideIds = new Set(
-    presentation.slides?.map((slide) => slide.objectId) ?? []
-  );
+  const presentationSlideIds = new Set(presentation.slides?.map((slide) => slide.objectId) ?? []);
 
   for (const slideId of validatedInput.slideIds) {
     if (!presentationSlideIds.has(slideId)) {

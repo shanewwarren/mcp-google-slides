@@ -5,34 +5,34 @@
  */
 
 import {
-  insertText,
-  InsertTextInputSchema,
-  type InsertTextInput,
-  type InsertTextOutput,
-} from './insert-text.js';
-import {
-  insertImage,
-  InsertImageInputSchema,
-  type InsertImageInput,
-  type InsertImageOutput,
-} from './insert-image.js';
-import {
-  createShape,
-  CreateShapeInputSchema,
   type CreateShapeInput,
+  CreateShapeInputSchema,
   type CreateShapeOutput,
+  createShape,
 } from './create-shape.js';
 import {
-  createTable,
-  CreateTableInputSchema,
   type CreateTableInput,
+  CreateTableInputSchema,
   type CreateTableOutput,
+  createTable,
 } from './create-table.js';
 import {
-  setSpeakerNotes,
-  SetSpeakerNotesInputSchema,
+  type InsertImageInput,
+  InsertImageInputSchema,
+  type InsertImageOutput,
+  insertImage,
+} from './insert-image.js';
+import {
+  type InsertTextInput,
+  InsertTextInputSchema,
+  type InsertTextOutput,
+  insertText,
+} from './insert-text.js';
+import {
   type SetSpeakerNotesInput,
+  SetSpeakerNotesInputSchema,
   type SetSpeakerNotesOutput,
+  setSpeakerNotes,
 } from './set-speaker-notes.js';
 
 /**
@@ -91,13 +91,11 @@ export const contentTools = [
         },
         placeholderId: {
           type: 'string',
-          description:
-            'ID of an existing placeholder to fill. If omitted, creates a text box.',
+          description: 'ID of an existing placeholder to fill. If omitted, creates a text box.',
         },
         position: {
           type: 'object',
-          description:
-            'Position for new text box (ignored if placeholderId provided)',
+          description: 'Position for new text box (ignored if placeholderId provided)',
           properties: {
             x: { type: 'number', description: 'Left edge in inches' },
             y: { type: 'number', description: 'Top edge in inches' },

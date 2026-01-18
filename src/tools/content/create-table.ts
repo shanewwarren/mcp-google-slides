@@ -6,8 +6,8 @@
 
 import { z } from 'zod';
 import { createSlidesClient } from '../../clients/index.js';
-import { inchesToEmu } from '../../utils/emu.js';
 import type { Position } from '../../types/common.js';
+import { inchesToEmu } from '../../utils/emu.js';
 
 /**
  * Input schema for create_table tool
@@ -16,12 +16,7 @@ export const CreateTableInputSchema = z.object({
   presentationId: z.string().describe('The presentation ID'),
   slideId: z.string().describe('The slide to add the table to'),
   rows: z.number().int().min(1).max(25).describe('Number of rows (1-25)'),
-  columns: z
-    .number()
-    .int()
-    .min(1)
-    .max(20)
-    .describe('Number of columns (1-20)'),
+  columns: z.number().int().min(1).max(20).describe('Number of columns (1-20)'),
   position: z
     .object({
       x: z.number().describe('Left edge in inches'),
@@ -68,9 +63,7 @@ function generateObjectId(): string {
  * @throws {PresentationNotFoundError} If presentation not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function createTable(
-  input: CreateTableInput
-): Promise<CreateTableOutput> {
+export async function createTable(input: CreateTableInput): Promise<CreateTableOutput> {
   // Validate input
   const validatedInput = CreateTableInputSchema.parse(input);
 

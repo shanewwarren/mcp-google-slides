@@ -5,25 +5,24 @@
  */
 
 import {
-  formatText,
-  FormatTextInputSchema,
-  type FormatTextInput,
-  type FormatTextOutput,
-} from './format-text.js';
-
-import {
-  formatParagraph,
-  FormatParagraphInputSchema,
-  type FormatParagraphInput,
-  type FormatParagraphOutput,
-} from './format-paragraph.js';
-
-import {
-  createBullets,
-  CreateBulletsInputSchema,
   type CreateBulletsInput,
+  CreateBulletsInputSchema,
   type CreateBulletsOutput,
+  createBullets,
 } from './create-bullets.js';
+
+import {
+  type FormatParagraphInput,
+  FormatParagraphInputSchema,
+  type FormatParagraphOutput,
+  formatParagraph,
+} from './format-paragraph.js';
+import {
+  type FormatTextInput,
+  FormatTextInputSchema,
+  type FormatTextOutput,
+  formatText,
+} from './format-text.js';
 
 /**
  * Export all formatting tool implementations
@@ -45,11 +44,7 @@ export type {
 /**
  * Export all formatting tool schemas
  */
-export {
-  FormatTextInputSchema,
-  FormatParagraphInputSchema,
-  CreateBulletsInputSchema,
-};
+export { FormatTextInputSchema, FormatParagraphInputSchema, CreateBulletsInputSchema };
 
 /**
  * MCP tool definitions for text formatting
@@ -223,7 +218,8 @@ export const formattingTools = [
             'NUMBERED_UPPERALPHA_ALPHA_ROMAN',
             'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT',
           ],
-          description: 'Preset bullet/number style (determines appearance at all nesting levels). Default: BULLET_DISC_CIRCLE_SQUARE',
+          description:
+            'Preset bullet/number style (determines appearance at all nesting levels). Default: BULLET_DISC_CIRCLE_SQUARE',
         },
         range: {
           type: 'object',

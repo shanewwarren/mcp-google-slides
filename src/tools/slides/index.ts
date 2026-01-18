@@ -5,39 +5,34 @@
  */
 
 import {
-  addSlide,
-  AddSlideInputSchema,
   type AddSlideInput,
+  AddSlideInputSchema,
   type AddSlideOutput,
+  addSlide,
 } from './add-slide.js';
 import {
-  getSlide,
-  GetSlideInputSchema,
-  type GetSlideInput,
-  type GetSlideOutput,
-} from './get-slide.js';
-import {
-  deleteSlide,
-  DeleteSlideInputSchema,
   type DeleteSlideInput,
+  DeleteSlideInputSchema,
   type DeleteSlideOutput,
+  deleteSlide,
 } from './delete-slide.js';
 import {
-  reorderSlides,
-  ReorderSlidesInputSchema,
+  type GetSlideInput,
+  GetSlideInputSchema,
+  type GetSlideOutput,
+  getSlide,
+} from './get-slide.js';
+import {
   type ReorderSlidesInput,
+  ReorderSlidesInputSchema,
   type ReorderSlidesOutput,
+  reorderSlides,
 } from './reorder-slides.js';
 
 /**
  * Export all slide tool implementations
  */
-export {
-  addSlide,
-  getSlide,
-  deleteSlide,
-  reorderSlides,
-};
+export { addSlide, getSlide, deleteSlide, reorderSlides };
 
 /**
  * Export all slide tool types

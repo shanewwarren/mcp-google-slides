@@ -47,16 +47,12 @@ export async function getSlide(input: GetSlideInput): Promise<GetSlideOutput> {
   const client = await createSlidesClient();
 
   // Get the slide using the client's getSlide method
-  const slide = await client.getSlide(
-    validatedInput.presentationId,
-    validatedInput.slideId
-  );
+  const slide = await client.getSlide(validatedInput.presentationId, validatedInput.slideId);
 
   // Also get the full presentation to find the slide's index
   const presentation = await client.getPresentation(validatedInput.presentationId);
-  const slideIndex = presentation.slides?.findIndex(
-    (s) => s.objectId === validatedInput.slideId
-  ) ?? -1;
+  const slideIndex =
+    presentation.slides?.findIndex((s) => s.objectId === validatedInput.slideId) ?? -1;
 
   // Extract element information
   const elements: Array<{

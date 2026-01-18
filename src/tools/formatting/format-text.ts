@@ -199,9 +199,7 @@ function estimateCharacterCount(range?: z.infer<typeof TextRangeSchema>): number
  * @throws {PresentationNotFoundError} If presentation not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function formatText(
-  input: FormatTextInput
-): Promise<FormatTextOutput> {
+export async function formatText(input: FormatTextInput): Promise<FormatTextOutput> {
   // Validate input
   const validatedInput = FormatTextInputSchema.parse(input);
 

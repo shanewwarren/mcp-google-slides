@@ -6,8 +6,8 @@
 
 import { z } from 'zod';
 import { createSlidesClient } from '../../clients/index.js';
-import { inchesToEmu } from '../../utils/emu.js';
 import type { Position } from '../../types/common.js';
+import { inchesToEmu } from '../../utils/emu.js';
 
 /**
  * Input schema for insert_image tool
@@ -15,10 +15,7 @@ import type { Position } from '../../types/common.js';
 export const InsertImageInputSchema = z.object({
   presentationId: z.string().describe('The presentation ID'),
   slideId: z.string().describe('The slide to add the image to'),
-  imageUrl: z
-    .string()
-    .url()
-    .describe('URL of the image to insert (must be publicly accessible)'),
+  imageUrl: z.string().url().describe('URL of the image to insert (must be publicly accessible)'),
   position: z
     .object({
       x: z.number().describe('Left edge in inches'),
@@ -67,9 +64,7 @@ function generateObjectId(): string {
  * @throws {QuotaExceededError} If API quota is exceeded
  * @throws {Error} If image URL is not accessible
  */
-export async function insertImage(
-  input: InsertImageInput
-): Promise<InsertImageOutput> {
+export async function insertImage(input: InsertImageInput): Promise<InsertImageOutput> {
   // Validate input
   const validatedInput = InsertImageInputSchema.parse(input);
 

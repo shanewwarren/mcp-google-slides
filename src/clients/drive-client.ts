@@ -6,10 +6,10 @@
  * All methods use an authenticated OAuth2Client from the auth module.
  */
 
-import { google, drive_v3 } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import type { OAuth2Client } from 'google-auth-library';
+import { type drive_v3, google } from 'googleapis';
 import { getAuthenticatedClient } from '../auth/index.js';
-import { QuotaExceededError, PermissionDeniedError } from './slides-client.js';
+import { PermissionDeniedError, QuotaExceededError } from './slides-client.js';
 
 /**
  * Presentation summary for listing

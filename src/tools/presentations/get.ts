@@ -41,9 +41,7 @@ export interface GetPresentationOutput {
  * @throws {PermissionDeniedError} If no access to presentation
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function getPresentation(
-  input: GetPresentationInput
-): Promise<GetPresentationOutput> {
+export async function getPresentation(input: GetPresentationInput): Promise<GetPresentationOutput> {
   // Validate input
   const validatedInput = GetPresentationInputSchema.parse(input);
 

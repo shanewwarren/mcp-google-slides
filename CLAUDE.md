@@ -9,6 +9,8 @@ This server allows users to ask an LLM to generate Google Slides presentations f
 ## Key Design Decisions
 
 - **TypeScript + MCP SDK** - Uses `@modelcontextprotocol/sdk` for the server implementation
+- **Bun Runtime** - Uses Bun for runtime, package management, and testing (see `specs/bun-migration.md`)
+- **Biome Tooling** - Uses Biome for linting and formatting
 - **Browser OAuth with PKCE** - No manual API key creation; opens browser for Google consent
 - **Token persistence** - Credentials stored locally at `~/.mcp-google-slides/tokens.json`
 - **Bundled OAuth credentials** - Server includes its own Google Cloud OAuth client (not user-provided)
@@ -75,21 +77,26 @@ src/
 - `google-auth-library` - OAuth 2.0 client
 - `open` - Cross-platform browser launch
 - `zod` - Input validation
+- `@biomejs/biome` - Linting and formatting (dev)
 
 ## Development
 
 ```bash
 # Install dependencies
-npm install
+bun install
 
 # Run in development
-npm run dev
+bun run dev
 
 # Build
-npm run build
+bun run build
 
 # Test
-npm test
+bun test
+
+# Lint and format
+bun run lint
+bun run format
 ```
 
 ## References

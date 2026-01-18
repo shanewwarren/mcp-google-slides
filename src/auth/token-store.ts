@@ -2,10 +2,10 @@
  * Token storage implementation for persisting OAuth credentials
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as os from 'os';
-import { StoredTokens } from '../types/common.js';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
+import type { StoredTokens } from '../types/common.js';
 
 /**
  * Get the path to the token storage file
@@ -112,5 +112,5 @@ export async function deleteTokens(): Promise<void> {
 export function areTokensExpiring(tokens: StoredTokens, bufferMinutes: number = 5): boolean {
   const now = Date.now();
   const bufferMs = bufferMinutes * 60 * 1000;
-  return tokens.expiresAt <= (now + bufferMs);
+  return tokens.expiresAt <= now + bufferMs;
 }

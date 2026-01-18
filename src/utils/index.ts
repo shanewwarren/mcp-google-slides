@@ -2,26 +2,25 @@
  * Utility function exports
  */
 
-// EMU conversion utilities
-export {
-  EMU_PER_INCH,
-  EMU_PER_POINT,
-  EMU_PER_CM,
-  inchesToEmu,
-  emuToInches,
-  pointsToEmu,
-  emuToPoints,
-  cmToEmu,
-  emuToCm,
-} from './emu.js';
-
 // Color parsing utilities
 export {
+  ColorParseError,
+  getSupportedColorNames,
   parseColor,
   parseHexColor,
-  parseRgbColor,
   parseNamedColor,
+  parseRgbColor,
   toHexColor,
-  getSupportedColorNames,
-  ColorParseError,
 } from './colors.js';
+// EMU conversion utilities
+export {
+  cmToEmu,
+  EMU_PER_CM,
+  EMU_PER_INCH,
+  EMU_PER_POINT,
+  emuToCm,
+  emuToInches,
+  emuToPoints,
+  inchesToEmu,
+  pointsToEmu,
+} from './emu.js';

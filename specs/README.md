@@ -35,6 +35,12 @@ This directory contains specifications for the project's features and systems. E
 | [content-insertion.md](./content-insertion.md) | Planned | Adding text, images, shapes, tables, and speaker notes |
 | [text-formatting.md](./text-formatting.md) | Planned | Styling text with fonts, colors, bullets, and paragraph formatting |
 
+## Infrastructure
+
+| Spec | Status | Purpose |
+|------|--------|---------|
+| [bun-migration.md](./bun-migration.md) | Implemented | Migrate from Node.js/npm/Jest to Bun runtime and tooling |
+
 ---
 
 ## Using These Specs

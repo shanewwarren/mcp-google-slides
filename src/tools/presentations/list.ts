@@ -11,7 +11,12 @@ import { createDriveClient, type PresentationSummary } from '../../clients/index
  * Input schema for list_presentations tool
  */
 export const ListPresentationsInputSchema = z.object({
-  limit: z.number().int().positive().default(10).describe('Maximum number of presentations to return'),
+  limit: z
+    .number()
+    .int()
+    .positive()
+    .default(10)
+    .describe('Maximum number of presentations to return'),
 });
 
 export type ListPresentationsInput = z.infer<typeof ListPresentationsInputSchema>;

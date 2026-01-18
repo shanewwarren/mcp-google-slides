@@ -4,18 +4,17 @@
  * Central export point for all Google API client wrappers
  */
 
-// Slides API client
-export {
-  SlidesClient,
-  createSlidesClient,
-  PresentationNotFoundError,
-  QuotaExceededError,
-  PermissionDeniedError,
-} from './slides-client.js';
-
 // Drive API client
 export {
-  DriveClient,
   createDriveClient,
+  DriveClient,
   PresentationSummary,
 } from './drive-client.js';
+// Slides API client
+export {
+  createSlidesClient,
+  PermissionDeniedError,
+  PresentationNotFoundError,
+  QuotaExceededError,
+  SlidesClient,
+} from './slides-client.js';

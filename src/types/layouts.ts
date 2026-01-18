@@ -10,18 +10,18 @@
  * See: https://developers.google.com/slides/api/reference/rest/v1/presentations.pages#LayoutProperties
  */
 export type PredefinedLayout =
-  | 'PREDEFINED_LAYOUT_UNSPECIFIED'  // Unspecified layout (not recommended)
-  | 'BLANK'                          // Empty slide, no placeholders
-  | 'CAPTION_ONLY'                   // Caption at bottom
-  | 'TITLE'                          // Title and subtitle centered
-  | 'TITLE_AND_BODY'                 // Title with content area
-  | 'TITLE_AND_TWO_COLUMNS'          // Title with two columns
-  | 'TITLE_ONLY'                     // Just a title placeholder
-  | 'SECTION_HEADER'                 // Section divider/break
-  | 'SECTION_TITLE_AND_DESCRIPTION'  // Section title on one side, description on other
-  | 'ONE_COLUMN_TEXT'                // Single column text layout
-  | 'MAIN_POINT'                     // Emphasis layout for key points
-  | 'BIG_NUMBER';                    // Large number display for stats
+  | 'PREDEFINED_LAYOUT_UNSPECIFIED' // Unspecified layout (not recommended)
+  | 'BLANK' // Empty slide, no placeholders
+  | 'CAPTION_ONLY' // Caption at bottom
+  | 'TITLE' // Title and subtitle centered
+  | 'TITLE_AND_BODY' // Title with content area
+  | 'TITLE_AND_TWO_COLUMNS' // Title with two columns
+  | 'TITLE_ONLY' // Just a title placeholder
+  | 'SECTION_HEADER' // Section divider/break
+  | 'SECTION_TITLE_AND_DESCRIPTION' // Section title on one side, description on other
+  | 'ONE_COLUMN_TEXT' // Single column text layout
+  | 'MAIN_POINT' // Emphasis layout for key points
+  | 'BIG_NUMBER'; // Large number display for stats
 
 /**
  * Shape types supported by Google Slides API
@@ -61,7 +61,7 @@ export type ShapeType =
   | 'CALLOUT_ROUND_RECTANGLE'
   | 'CALLOUT_ELLIPSE'
   // Special
-  | 'TEXT_BOX'            // For creating text boxes
+  | 'TEXT_BOX' // For creating text boxes
   | 'CLOUD'
   | 'HEART'
   | 'PLUS'
@@ -75,17 +75,17 @@ export type ShapeType =
  */
 export type BulletPreset =
   // Bullet styles
-  | 'BULLET_DISC_CIRCLE_SQUARE'        // •, ◦, ▪ (default bullet)
-  | 'BULLET_DIAMONDX_ARROW3D_SQUARE'   // ◇, ➢, ▪
-  | 'BULLET_CHECKBOX'                  // ☐
-  | 'BULLET_ARROW_DIAMOND_DISC'        // ➤, ◆, •
-  | 'BULLET_STAR_CIRCLE_SQUARE'        // ★, ○, ▪
-  | 'BULLET_ARROW3D_CIRCLE_SQUARE'     // ➢, ○, ▪
+  | 'BULLET_DISC_CIRCLE_SQUARE' // •, ◦, ▪ (default bullet)
+  | 'BULLET_DIAMONDX_ARROW3D_SQUARE' // ◇, ➢, ▪
+  | 'BULLET_CHECKBOX' // ☐
+  | 'BULLET_ARROW_DIAMOND_DISC' // ➤, ◆, •
+  | 'BULLET_STAR_CIRCLE_SQUARE' // ★, ○, ▪
+  | 'BULLET_ARROW3D_CIRCLE_SQUARE' // ➢, ○, ▪
   // Numbered styles
-  | 'NUMBERED_DIGIT_ALPHA_ROMAN'       // 1, a, i (default numbered)
-  | 'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS'// 1), a), i)
-  | 'NUMBERED_DIGIT_NESTED'            // 1., 1.1., 1.1.1.
-  | 'NUMBERED_UPPERALPHA_ALPHA_ROMAN'  // A, a, i
+  | 'NUMBERED_DIGIT_ALPHA_ROMAN' // 1, a, i (default numbered)
+  | 'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS' // 1), a), i)
+  | 'NUMBERED_DIGIT_NESTED' // 1., 1.1., 1.1.1.
+  | 'NUMBERED_UPPERALPHA_ALPHA_ROMAN' // A, a, i
   | 'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT'; // I, A, 1
 
 /**
@@ -93,12 +93,7 @@ export type BulletPreset =
  *
  * Placeholders are predefined text areas in slide layouts that can be populated with content.
  */
-export type PlaceholderType =
-  | 'TITLE'
-  | 'SUBTITLE'
-  | 'BODY'
-  | 'CENTERED_TITLE'
-  | 'SLIDE_NUMBER';
+export type PlaceholderType = 'TITLE' | 'SUBTITLE' | 'BODY' | 'CENTERED_TITLE' | 'SLIDE_NUMBER';
 
 /**
  * Information about a placeholder on a slide

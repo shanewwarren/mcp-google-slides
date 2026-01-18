@@ -5,32 +5,28 @@
  */
 
 import {
-  createPresentation,
-  CreatePresentationInputSchema,
   type CreatePresentationInput,
+  CreatePresentationInputSchema,
   type CreatePresentationOutput,
+  createPresentation,
 } from './create.js';
 import {
-  getPresentation,
-  GetPresentationInputSchema,
   type GetPresentationInput,
+  GetPresentationInputSchema,
   type GetPresentationOutput,
+  getPresentation,
 } from './get.js';
 import {
-  listPresentations,
-  ListPresentationsInputSchema,
   type ListPresentationsInput,
+  ListPresentationsInputSchema,
   type ListPresentationsOutput,
+  listPresentations,
 } from './list.js';
 
 /**
  * Export all presentation tool implementations
  */
-export {
-  createPresentation,
-  getPresentation,
-  listPresentations,
-};
+export { createPresentation, getPresentation, listPresentations };
 
 /**
  * Export all presentation tool types
@@ -47,11 +43,7 @@ export type {
 /**
  * Export all presentation tool schemas
  */
-export {
-  CreatePresentationInputSchema,
-  GetPresentationInputSchema,
-  ListPresentationsInputSchema,
-};
+export { CreatePresentationInputSchema, GetPresentationInputSchema, ListPresentationsInputSchema };
 
 /**
  * MCP tool definitions for presentation management

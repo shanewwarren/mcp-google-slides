@@ -9,30 +9,27 @@
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
 import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js';
+import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import {
-  CallToolRequestSchema,
-  ListToolsRequestSchema,
-} from '@modelcontextprotocol/sdk/types.js';
-import {
-  presentationTools,
-  createPresentation,
-  getPresentation,
-  listPresentations,
-  slideTools,
   addSlide,
-  getSlide,
-  deleteSlide,
-  reorderSlides,
   contentTools,
-  insertText,
-  insertImage,
+  createBullets,
+  createPresentation,
   createShape,
   createTable,
-  setSpeakerNotes,
-  formattingTools,
-  formatText,
+  deleteSlide,
   formatParagraph,
-  createBullets,
+  formatText,
+  formattingTools,
+  getPresentation,
+  getSlide,
+  insertImage,
+  insertText,
+  listPresentations,
+  presentationTools,
+  reorderSlides,
+  setSpeakerNotes,
+  slideTools,
 } from './tools/index.js';
 
 /**

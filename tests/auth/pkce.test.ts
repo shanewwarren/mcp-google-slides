@@ -2,12 +2,8 @@
  * Unit tests for PKCE (Proof Key for Code Exchange) utilities
  */
 
-import * as crypto from 'crypto';
-import {
-  generateCodeVerifier,
-  generateCodeChallenge,
-  generateState,
-} from '../../src/auth/pkce.js';
+import * as crypto from 'node:crypto';
+import { generateCodeChallenge, generateCodeVerifier, generateState } from '../../src/auth/pkce.js';
 
 describe('PKCE Utilities', () => {
   describe('generateCodeVerifier', () => {

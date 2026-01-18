@@ -25,11 +25,18 @@ const ParagraphAlignmentSchema = z.enum(['START', 'CENTER', 'END', 'JUSTIFIED'])
  */
 const ParagraphStyleSchema = z.object({
   alignment: ParagraphAlignmentSchema.optional().describe('Text alignment'),
-  lineSpacing: z.number().positive().optional().describe('Line spacing percentage (100 = single, 150 = 1.5x)'),
+  lineSpacing: z
+    .number()
+    .positive()
+    .optional()
+    .describe('Line spacing percentage (100 = single, 150 = 1.5x)'),
   spaceBefore: z.number().min(0).optional().describe('Space before paragraph in points'),
   spaceAfter: z.number().min(0).optional().describe('Space after paragraph in points'),
   indentStart: z.number().min(0).optional().describe('Left indent in points'),
-  indentFirstLine: z.number().optional().describe('First line indent in points (can be negative for hanging indent)'),
+  indentFirstLine: z
+    .number()
+    .optional()
+    .describe('First line indent in points (can be negative for hanging indent)'),
 });
 
 /**
@@ -175,9 +182,7 @@ function estimateParagraphCount(): number {
  * @throws {PresentationNotFoundError} If presentation not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function formatParagraph(
-  input: FormatParagraphInput
-): Promise<FormatParagraphOutput> {
+export async function formatParagraph(input: FormatParagraphInput): Promise<FormatParagraphOutput> {
   // Validate input
   const validatedInput = FormatParagraphInputSchema.parse(input);
 

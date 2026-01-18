@@ -3,10 +3,11 @@
  *
  * Creates a temporary HTTP server on localhost (127.0.0.1) to receive
  * the OAuth authorization code from Google after user consent.
+ *
+ * Uses Bun.serve() for native HTTP handling.
  */
 
-import * as http from 'http';
-import { URL } from 'url';
+import type { Server } from 'bun';
 
 /**
  * Result from the OAuth callback
@@ -63,31 +64,8 @@ export class OAuthCallbackError extends Error {
   }
 }
 
-/**
- * Start a local HTTP server to receive the OAuth callback
- *
- * The server listens for a single callback request, validates the state
- * parameter, and returns the authorization code. The server automatically
- * shuts down after receiving the callback or timing out.
- *
- * @param config - Configuration for the callback server
- * @returns Promise that resolves with the callback result
- * @throws {CallbackTimeoutError} If no callback is received within the timeout
- * @throws {StateMismatchError} If the state parameter doesn't match
- * @throws {OAuthCallbackError} If the callback contains an error
- */
-export async function startCallbackServer(
-  config: CallbackServerConfig
-): Promise<CallbackResult> {
-  const port = config.port ?? parseInt(process.env.MCP_GSLIDES_CALLBACK_PORT || '8085', 10);
-  const timeout = config.timeout ?? 120000; // 2 minutes default
-
-  return new Promise((resolve, reject) => {
-    let timeoutHandle: NodeJS.Timeout;
-    let server: http.Server;
-
-    // HTML page shown to user after successful authentication
-    const successHtml = `<!DOCTYPE html>
+// HTML page shown to user after successful authentication
+const successHtml = `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -140,8 +118,9 @@ export async function startCallbackServer(
 </body>
 </html>`;
 
-    // HTML page shown when there's an error
-    const errorHtml = (error: string, description: string) => `<!DOCTYPE html>
+// HTML page shown when there's an error
+function errorHtml(error: string, description: string): string {
+  return `<!DOCTYPE html>
 <html>
 <head>
   <meta charset="utf-8">
@@ -196,6 +175,29 @@ export async function startCallbackServer(
   </div>
 </body>
 </html>`;
+}
+
+/**
+ * Start a local HTTP server to receive the OAuth callback
+ *
+ * The server listens for a single callback request, validates the state
+ * parameter, and returns the authorization code. The server automatically
+ * shuts down after receiving the callback or timing out.
+ *
+ * @param config - Configuration for the callback server
+ * @returns Promise that resolves with the callback result
+ * @throws {CallbackTimeoutError} If no callback is received within the timeout
+ * @throws {StateMismatchError} If the state parameter doesn't match
+ * @throws {OAuthCallbackError} If the callback contains an error
+ */
+export async function startCallbackServer(config: CallbackServerConfig): Promise<CallbackResult> {
+  const port = config.port ?? parseInt(process.env.MCP_GSLIDES_CALLBACK_PORT || '8085', 10);
+  const timeout = config.timeout ?? 120000; // 2 minutes default
+
+  return new Promise((resolve, reject) => {
+    let timeoutHandle: ReturnType<typeof setTimeout>;
+    let server: Server;
+    let settled = false;
 
     // Cleanup function to close server and clear timeout
     const cleanup = () => {
@@ -203,87 +205,99 @@ export async function startCallbackServer(
         clearTimeout(timeoutHandle);
       }
       if (server) {
-        server.close();
+        server.stop();
       }
     };
 
-    // Create HTTP server to handle callback
-    server = http.createServer((req, res) => {
-      // Only handle GET requests to /callback
-      if (req.method !== 'GET') {
-        res.writeHead(405, { 'Content-Type': 'text/plain' });
-        res.end('Method Not Allowed');
-        return;
+    // Helper to settle the promise only once
+    // Delays cleanup to allow the Response to be sent first
+    const settleOnce = (fn: typeof resolve | typeof reject, value: CallbackResult | Error) => {
+      if (!settled) {
+        settled = true;
+        // Use setImmediate-like behavior to let the Response be sent first
+        setTimeout(() => {
+          cleanup();
+          fn(value as CallbackResult & Error);
+        }, 0);
       }
+    };
 
-      // Parse URL and query parameters
-      const url = new URL(req.url || '', `http://${req.headers.host}`);
+    // Create HTTP server using Bun.serve
+    server = Bun.serve({
+      port,
+      hostname: '127.0.0.1',
 
-      // Check if this is the callback path
-      if (!url.pathname.startsWith('/callback')) {
-        res.writeHead(404, { 'Content-Type': 'text/plain' });
-        res.end('Not Found');
-        return;
-      }
+      fetch(req) {
+        // Only handle GET requests
+        if (req.method !== 'GET') {
+          return new Response('Method Not Allowed', { status: 405 });
+        }
 
-      // Extract code, state, and error from query parameters
-      const code = url.searchParams.get('code');
-      const state = url.searchParams.get('state');
-      const error = url.searchParams.get('error');
-      const errorDescription = url.searchParams.get('error_description');
+        // Parse URL and query parameters
+        const url = new URL(req.url);
 
-      // Handle OAuth errors (user denied consent, etc.)
-      if (error) {
-        res.writeHead(200, { 'Content-Type': 'text/html' });
-        res.end(errorHtml(error, errorDescription || 'Authentication was not successful'));
-        cleanup();
-        reject(new OAuthCallbackError(error, errorDescription || undefined));
-        return;
-      }
+        // Check if this is the callback path
+        if (!url.pathname.startsWith('/callback')) {
+          return new Response('Not Found', { status: 404 });
+        }
 
-      // Validate that we have both code and state
-      if (!code || !state) {
-        res.writeHead(400, { 'Content-Type': 'text/html' });
-        res.end(errorHtml('invalid_request', 'Missing required parameters'));
-        cleanup();
-        reject(new OAuthCallbackError('invalid_request', 'Missing code or state parameter'));
-        return;
-      }
+        // Extract code, state, and error from query parameters
+        const code = url.searchParams.get('code');
+        const state = url.searchParams.get('state');
+        const error = url.searchParams.get('error');
+        const errorDescription = url.searchParams.get('error_description');
 
-      // Validate state parameter (CSRF protection)
-      if (state !== config.expectedState) {
-        res.writeHead(403, { 'Content-Type': 'text/html' });
-        res.end(errorHtml('state_mismatch', 'Possible CSRF attack detected'));
-        cleanup();
-        reject(new StateMismatchError());
-        return;
-      }
+        // Handle OAuth errors (user denied consent, etc.)
+        if (error) {
+          settleOnce(reject, new OAuthCallbackError(error, errorDescription || undefined));
+          return new Response(
+            errorHtml(error, errorDescription || 'Authentication was not successful'),
+            {
+              status: 200,
+              headers: { 'Content-Type': 'text/html' },
+            }
+          );
+        }
 
-      // Success! Send success page and resolve with the code
-      res.writeHead(200, { 'Content-Type': 'text/html' });
-      res.end(successHtml);
+        // Validate that we have both code and state
+        if (!code || !state) {
+          settleOnce(
+            reject,
+            new OAuthCallbackError('invalid_request', 'Missing code or state parameter')
+          );
+          return new Response(errorHtml('invalid_request', 'Missing required parameters'), {
+            status: 400,
+            headers: { 'Content-Type': 'text/html' },
+          });
+        }
 
-      cleanup();
-      resolve({ code, state });
+        // Validate state parameter (CSRF protection)
+        if (state !== config.expectedState) {
+          settleOnce(reject, new StateMismatchError());
+          return new Response(errorHtml('state_mismatch', 'Possible CSRF attack detected'), {
+            status: 403,
+            headers: { 'Content-Type': 'text/html' },
+          });
+        }
+
+        // Success! Send success page and resolve with the code
+        settleOnce(resolve, { code, state });
+        return new Response(successHtml, {
+          status: 200,
+          headers: { 'Content-Type': 'text/html' },
+        });
+      },
+
+      error(err) {
+        settleOnce(reject, err);
+        return new Response('Internal Server Error', { status: 500 });
+      },
     });
 
     // Set up timeout
     timeoutHandle = setTimeout(() => {
-      cleanup();
-      reject(new CallbackTimeoutError(timeout));
+      settleOnce(reject, new CallbackTimeoutError(timeout));
     }, timeout);
-
-    // Start listening
-    // Use 127.0.0.1 (loopback IP) instead of 'localhost' per Google's recommendations
-    server.listen(port, '127.0.0.1', () => {
-      // Server is ready
-    });
-
-    // Handle server errors
-    server.on('error', (error) => {
-      cleanup();
-      reject(error);
-    });
   });
 }
 

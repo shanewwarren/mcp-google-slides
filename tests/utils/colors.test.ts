@@ -2,16 +2,16 @@
  * Unit tests for color parsing utilities
  */
 
+import type { RgbColor } from '../../src/types/common.js';
 import {
+  ColorParseError,
+  getSupportedColorNames,
   parseColor,
   parseHexColor,
-  parseRgbColor,
   parseNamedColor,
+  parseRgbColor,
   toHexColor,
-  getSupportedColorNames,
-  ColorParseError,
 } from '../../src/utils/colors.js';
-import { RgbColor } from '../../src/types/common.js';
 
 describe('ColorParseError', () => {
   test('creates error with message', () => {
@@ -167,29 +167,21 @@ describe('parseRgbColor', () => {
   describe('error cases', () => {
     test('throws on invalid format', () => {
       expect(() => parseRgbColor('rgb(255, 87)')).toThrow(ColorParseError);
-      expect(() => parseRgbColor('rgb(255, 87)')).toThrow(
-        'expected format rgb(r, g, b)'
-      );
+      expect(() => parseRgbColor('rgb(255, 87)')).toThrow('expected format rgb(r, g, b)');
     });
 
     test('throws on values > 255', () => {
       expect(() => parseRgbColor('rgb(256, 0, 0)')).toThrow(ColorParseError);
-      expect(() => parseRgbColor('rgb(256, 0, 0)')).toThrow(
-        'RGB values must be 0-255'
-      );
+      expect(() => parseRgbColor('rgb(256, 0, 0)')).toThrow('RGB values must be 0-255');
     });
 
     test('throws on negative values', () => {
       expect(() => parseRgbColor('rgb(-1, 0, 0)')).toThrow(ColorParseError);
-      expect(() => parseRgbColor('rgb(-1, 0, 0)')).toThrow(
-        'expected format rgb(r, g, b)'
-      );
+      expect(() => parseRgbColor('rgb(-1, 0, 0)')).toThrow('expected format rgb(r, g, b)');
     });
 
     test('throws on non-numeric values', () => {
-      expect(() => parseRgbColor('rgb(red, green, blue)')).toThrow(
-        ColorParseError
-      );
+      expect(() => parseRgbColor('rgb(red, green, blue)')).toThrow(ColorParseError);
     });
 
     test('throws on missing parentheses', () => {

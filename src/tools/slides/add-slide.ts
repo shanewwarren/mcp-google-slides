@@ -129,9 +129,9 @@ export async function addSlide(input: AddSlideInput): Promise<AddSlideOutput> {
   // Return the result
   return {
     slideId,
-    index: createSlideReply.objectId ?
-      (presentation.slides?.findIndex(s => s.objectId === slideId) ?? -1) :
-      -1,
+    index: createSlideReply.objectId
+      ? (presentation.slides?.findIndex((s) => s.objectId === slideId) ?? -1)
+      : -1,
     placeholders,
   };
 }

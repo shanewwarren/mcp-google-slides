@@ -5,8 +5,8 @@
  * All methods use an authenticated OAuth2Client from the auth module.
  */
 
-import { google, slides_v1 } from 'googleapis';
-import { OAuth2Client } from 'google-auth-library';
+import type { OAuth2Client } from 'google-auth-library';
+import { google, type slides_v1 } from 'googleapis';
 import { getAuthenticatedClient } from '../auth/index.js';
 
 /**
@@ -166,10 +166,7 @@ export class SlidesClient {
    * @throws {PermissionDeniedError} If no access to presentation
    * @throws {QuotaExceededError} If API quota is exceeded
    */
-  async getSlide(
-    presentationId: string,
-    pageObjectId: string
-  ): Promise<slides_v1.Schema$Page> {
+  async getSlide(presentationId: string, pageObjectId: string): Promise<slides_v1.Schema$Page> {
     try {
       const response = await this.slides.presentations.pages.get({
         presentationId,

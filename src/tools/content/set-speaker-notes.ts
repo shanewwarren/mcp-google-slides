@@ -13,9 +13,7 @@ import { createSlidesClient } from '../../clients/index.js';
 export const SetSpeakerNotesInputSchema = z.object({
   presentationId: z.string().describe('The presentation ID'),
   slideId: z.string().describe('The slide to add notes to'),
-  notes: z
-    .string()
-    .describe('The speaker notes content (plain text or simple formatting)'),
+  notes: z.string().describe('The speaker notes content (plain text or simple formatting)'),
 });
 
 export type SetSpeakerNotesInput = z.infer<typeof SetSpeakerNotesInputSchema>;
@@ -50,9 +48,7 @@ export class SpeakerNotesNotFoundError extends Error {
  * @throws {SpeakerNotesNotFoundError} If speaker notes shape not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function setSpeakerNotes(
-  input: SetSpeakerNotesInput
-): Promise<SetSpeakerNotesOutput> {
+export async function setSpeakerNotes(input: SetSpeakerNotesInput): Promise<SetSpeakerNotesOutput> {
   // Validate input
   const validatedInput = SetSpeakerNotesInputSchema.parse(input);
 
@@ -60,10 +56,7 @@ export async function setSpeakerNotes(
   const client = await createSlidesClient();
 
   // Get the slide to find the speaker notes object ID
-  const slide = await client.getSlide(
-    validatedInput.presentationId,
-    validatedInput.slideId
-  );
+  const slide = await client.getSlide(validatedInput.presentationId, validatedInput.slideId);
 
   // Extract speaker notes object ID
   const speakerNotesObjectId =

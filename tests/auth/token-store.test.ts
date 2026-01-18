@@ -2,17 +2,17 @@
  * Integration tests for token storage
  */
 
-import * as fs from 'fs/promises';
-import * as path from 'path';
-import * as os from 'os';
+import * as fs from 'node:fs/promises';
+import * as os from 'node:os';
+import * as path from 'node:path';
 import {
+  areTokensExpiring,
+  deleteTokens,
+  getTokenPath,
   loadTokens,
   saveTokens,
-  deleteTokens,
-  areTokensExpiring,
-  getTokenPath,
 } from '../../src/auth/token-store.js';
-import { StoredTokens } from '../../src/types/common.js';
+import type { StoredTokens } from '../../src/types/common.js';
 
 describe('Token Storage', () => {
   let testDir: string;
@@ -32,7 +32,7 @@ describe('Token Storage', () => {
     // Clean up test directory
     try {
       await fs.rm(testDir, { recursive: true, force: true });
-    } catch (error) {
+    } catch (_error) {
       // Ignore cleanup errors
     }
 
@@ -95,8 +95,8 @@ describe('Token Storage', () => {
 
       // On Unix-like systems, check file mode
       if (process.platform !== 'win32') {
-        const mode = stats.mode & parseInt('777', 8);
-        expect(mode).toBe(parseInt('600', 8));
+        const mode = stats.mode & 0o777;
+        expect(mode).toBe(0o600);
       }
     });
 
@@ -156,7 +156,10 @@ describe('Token Storage', () => {
     });
 
     test('does not throw when token file does not exist', async () => {
-      await expect(deleteTokens()).resolves.not.toThrow();
+      // Should complete without throwing
+      await deleteTokens();
+      // If we get here, no error was thrown
+      expect(true).toBe(true);
     });
 
     test('throws on other file system errors', async () => {

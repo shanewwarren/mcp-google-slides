@@ -6,8 +6,8 @@
 
 import { z } from 'zod';
 import { createSlidesClient } from '../../clients/index.js';
-import { inchesToEmu } from '../../utils/emu.js';
 import type { Position } from '../../types/common.js';
+import { inchesToEmu } from '../../utils/emu.js';
 
 /**
  * Input schema for insert_text tool
@@ -19,9 +19,7 @@ export const InsertTextInputSchema = z.object({
   placeholderId: z
     .string()
     .optional()
-    .describe(
-      'ID of an existing placeholder to fill. If omitted, creates a text box.'
-    ),
+    .describe('ID of an existing placeholder to fill. If omitted, creates a text box.'),
   position: z
     .object({
       x: z.number().describe('Left edge in inches'),
@@ -66,9 +64,7 @@ function generateObjectId(): string {
  * @throws {PresentationNotFoundError} If presentation not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function insertText(
-  input: InsertTextInput
-): Promise<InsertTextOutput> {
+export async function insertText(input: InsertTextInput): Promise<InsertTextOutput> {
   // Validate input
   const validatedInput = InsertTextInputSchema.parse(input);
 
@@ -96,9 +92,7 @@ export async function insertText(
   } else {
     // Mode 2: Create a text box and insert text
     if (!validatedInput.position) {
-      throw new Error(
-        'Position is required when placeholderId is not provided'
-      );
+      throw new Error('Position is required when placeholderId is not provided');
     }
 
     objectId = generateObjectId();

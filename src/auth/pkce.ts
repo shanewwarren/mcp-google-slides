@@ -3,7 +3,7 @@
  * Implements RFC 7636 for secure authorization code exchange
  */
 
-import * as crypto from 'crypto';
+import * as crypto from 'node:crypto';
 
 /**
  * Encode a buffer to base64url format (RFC 4648 section 5)

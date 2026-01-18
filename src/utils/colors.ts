@@ -4,7 +4,7 @@
  * Supports multiple color formats and converts them to Google's RGB format (0-1 range).
  */
 
-import { RgbColor } from '../types/common.js';
+import type { RgbColor } from '../types/common.js';
 
 /**
  * Named CSS color constants
@@ -41,12 +41,12 @@ const NAMED_COLORS: Record<string, RgbColor> = {
   indigo: { red: 0.294, green: 0, blue: 0.51 },
   crimson: { red: 0.863, green: 0.078, blue: 0.235 },
   coral: { red: 1, green: 0.498, blue: 0.314 },
-  salmon: { red: 0.980, green: 0.502, blue: 0.447 },
+  salmon: { red: 0.98, green: 0.502, blue: 0.447 },
   khaki: { red: 0.941, green: 0.902, blue: 0.549 },
   tan: { red: 0.824, green: 0.706, blue: 0.549 },
   beige: { red: 0.961, green: 0.961, blue: 0.863 },
   ivory: { red: 1, green: 1, blue: 0.941 },
-  lavender: { red: 0.902, green: 0.902, blue: 0.980 },
+  lavender: { red: 0.902, green: 0.902, blue: 0.98 },
   turquoise: { red: 0.251, green: 0.878, blue: 0.816 },
   plum: { red: 0.867, green: 0.627, blue: 0.867 },
   orchid: { red: 0.855, green: 0.439, blue: 0.839 },
@@ -61,11 +61,7 @@ const NAMED_COLORS: Record<string, RgbColor> = {
  */
 export class ColorParseError extends Error {
   constructor(input: string, reason?: string) {
-    super(
-      reason
-        ? `Cannot parse color "${input}": ${reason}`
-        : `Cannot parse color "${input}"`
-    );
+    super(reason ? `Cannot parse color "${input}": ${reason}` : `Cannot parse color "${input}"`);
     this.name = 'ColorParseError';
   }
 }
@@ -99,10 +95,7 @@ export function parseHexColor(hex: string): RgbColor {
     g = parseInt(cleanHex.slice(2, 4), 16);
     b = parseInt(cleanHex.slice(4, 6), 16);
   } else {
-    throw new ColorParseError(
-      hex,
-      `expected 3 or 6 hex digits, got ${cleanHex.length}`
-    );
+    throw new ColorParseError(hex, `expected 3 or 6 hex digits, got ${cleanHex.length}`);
   }
 
   // Convert from 0-255 to 0-1 range
@@ -157,10 +150,7 @@ export function parseNamedColor(name: string): RgbColor {
   const color = NAMED_COLORS[normalized];
 
   if (!color) {
-    throw new ColorParseError(
-      name,
-      'unknown color name (try hex or RGB format)'
-    );
+    throw new ColorParseError(name, 'unknown color name (try hex or RGB format)');
   }
 
   return color;

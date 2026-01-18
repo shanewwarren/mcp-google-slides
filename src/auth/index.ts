@@ -5,23 +5,16 @@
  * The main entry point is getAuthenticatedClient(), which handles the entire OAuth flow.
  */
 
-// Primary authentication API
+// Callback server (exported for testing)
 export {
-  getAuthenticatedClient,
-  AuthenticationError,
-  AuthFlowCancelledError,
-  TokenRefreshFailedError,
-} from './oauth-client.js';
-
-// Token storage utilities (for advanced use cases)
-export {
-  loadTokens,
-  saveTokens,
-  deleteTokens,
-  areTokensExpiring,
-  getTokenPath,
-} from './token-store.js';
-
+  type CallbackResult,
+  type CallbackServerConfig,
+  CallbackTimeoutError,
+  getCallbackUrl,
+  OAuthCallbackError,
+  StateMismatchError,
+  startCallbackServer,
+} from './callback-server.js';
 // OAuth configuration
 export {
   getOAuthConfig,
@@ -29,21 +22,25 @@ export {
   OAUTH_SCOPES,
   type OAuthConfig,
 } from './config.js';
+// Primary authentication API
+export {
+  AuthenticationError,
+  AuthFlowCancelledError,
+  getAuthenticatedClient,
+  TokenRefreshFailedError,
+} from './oauth-client.js';
 
 // PKCE utilities (exported for testing)
 export {
-  generateCodeVerifier,
   generateCodeChallenge,
+  generateCodeVerifier,
   generateState,
 } from './pkce.js';
-
-// Callback server (exported for testing)
+// Token storage utilities (for advanced use cases)
 export {
-  startCallbackServer,
-  getCallbackUrl,
-  CallbackTimeoutError,
-  StateMismatchError,
-  OAuthCallbackError,
-  type CallbackResult,
-  type CallbackServerConfig,
-} from './callback-server.js';
+  areTokensExpiring,
+  deleteTokens,
+  getTokenPath,
+  loadTokens,
+  saveTokens,
+} from './token-store.js';

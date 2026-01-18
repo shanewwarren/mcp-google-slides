@@ -6,9 +6,9 @@
 
 import { z } from 'zod';
 import { createSlidesClient } from '../../clients/index.js';
-import { inchesToEmu } from '../../utils/emu.js';
-import { parseColor } from '../../utils/colors.js';
 import type { Position } from '../../types/common.js';
+import { parseColor } from '../../utils/colors.js';
+import { inchesToEmu } from '../../utils/emu.js';
 
 /**
  * Input schema for create_shape tool
@@ -59,10 +59,7 @@ export const CreateShapeInputSchema = z.object({
       height: z.number().describe('Height in inches'),
     })
     .describe('Position and size for the shape'),
-  fillColor: z
-    .string()
-    .optional()
-    .describe("Fill color as hex (e.g., '#FF5733') or color name"),
+  fillColor: z.string().optional().describe("Fill color as hex (e.g., '#FF5733') or color name"),
   text: z.string().optional().describe('Optional text to place inside the shape'),
 });
 
@@ -99,9 +96,7 @@ function generateObjectId(): string {
  * @throws {QuotaExceededError} If API quota is exceeded
  * @throws {ColorParseError} If fill color format is invalid
  */
-export async function createShape(
-  input: CreateShapeInput
-): Promise<CreateShapeOutput> {
+export async function createShape(input: CreateShapeInput): Promise<CreateShapeOutput> {
   // Validate input
   const validatedInput = CreateShapeInputSchema.parse(input);
 

@@ -22,17 +22,17 @@ const TextRangeSchema = z.object({
  */
 const BulletPresetSchema = z.enum([
   // Bullet styles
-  'BULLET_DISC_CIRCLE_SQUARE',        // •, ◦, ▪ (default bullet)
-  'BULLET_DIAMONDX_ARROW3D_SQUARE',   // ◇, ➢, ▪
-  'BULLET_CHECKBOX',                  // ☐
-  'BULLET_ARROW_DIAMOND_DISC',        // ➤, ◆, •
-  'BULLET_STAR_CIRCLE_SQUARE',        // ★, ○, ▪
-  'BULLET_ARROW3D_CIRCLE_SQUARE',     // ➢, ○, ▪
+  'BULLET_DISC_CIRCLE_SQUARE', // •, ◦, ▪ (default bullet)
+  'BULLET_DIAMONDX_ARROW3D_SQUARE', // ◇, ➢, ▪
+  'BULLET_CHECKBOX', // ☐
+  'BULLET_ARROW_DIAMOND_DISC', // ➤, ◆, •
+  'BULLET_STAR_CIRCLE_SQUARE', // ★, ○, ▪
+  'BULLET_ARROW3D_CIRCLE_SQUARE', // ➢, ○, ▪
   // Numbered styles
-  'NUMBERED_DIGIT_ALPHA_ROMAN',       // 1, a, i (default numbered)
-  'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS',// 1), a), i)
-  'NUMBERED_DIGIT_NESTED',            // 1., 1.1., 1.1.1.
-  'NUMBERED_UPPERALPHA_ALPHA_ROMAN',  // A, a, i
+  'NUMBERED_DIGIT_ALPHA_ROMAN', // 1, a, i (default numbered)
+  'NUMBERED_DIGIT_ALPHA_ROMAN_PARENS', // 1), a), i)
+  'NUMBERED_DIGIT_NESTED', // 1., 1.1., 1.1.1.
+  'NUMBERED_UPPERALPHA_ALPHA_ROMAN', // A, a, i
   'NUMBERED_UPPERROMAN_UPPERALPHA_DIGIT', // I, A, 1
 ]);
 
@@ -107,9 +107,7 @@ function estimateParagraphCount(): number {
  * @throws {PresentationNotFoundError} If presentation not found
  * @throws {QuotaExceededError} If API quota is exceeded
  */
-export async function createBullets(
-  input: CreateBulletsInput
-): Promise<CreateBulletsOutput> {
+export async function createBullets(input: CreateBulletsInput): Promise<CreateBulletsOutput> {
   // Validate input
   const validatedInput = CreateBulletsInputSchema.parse(input);
 

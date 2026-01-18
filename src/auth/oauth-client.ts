@@ -7,19 +7,22 @@
  * - Interactive OAuth flow when needed
  */
 
-import { OAuth2Client, CodeChallengeMethod } from 'google-auth-library';
+import { CodeChallengeMethod, OAuth2Client } from 'google-auth-library';
 import open from 'open';
-import { StoredTokens } from '../types/common.js';
-import { loadTokens, saveTokens, areTokensExpiring } from './token-store.js';
-import { generateCodeVerifier, generateCodeChallenge, generateState } from './pkce.js';
+import type { StoredTokens } from '../types/common.js';
 import { startCallbackServer } from './callback-server.js';
 import { getOAuthConfig } from './config.js';
+import { generateCodeChallenge, generateCodeVerifier, generateState } from './pkce.js';
+import { areTokensExpiring, loadTokens, saveTokens } from './token-store.js';
 
 /**
  * Custom error for authentication failures
  */
 export class AuthenticationError extends Error {
-  constructor(message: string, public cause?: Error) {
+  constructor(
+    message: string,
+    public cause?: Error
+  ) {
     super(message);
     this.name = 'AuthenticationError';
   }
@@ -76,7 +79,7 @@ export async function getAuthenticatedClient(): Promise<OAuth2Client> {
         const refreshedTokens = await refreshAccessToken(oauth2Client, tokens.refreshToken);
         setClientCredentials(oauth2Client, refreshedTokens);
         return oauth2Client;
-      } catch (error) {
+      } catch (_error) {
         // Refresh failed - fall through to interactive flow
         console.error('Token refresh failed, starting new OAuth flow');
       }
@@ -93,10 +96,7 @@ export async function getAuthenticatedClient(): Promise<OAuth2Client> {
     setClientCredentials(oauth2Client, newTokens);
     return oauth2Client;
   } catch (error) {
-    throw new AuthenticationError(
-      'Failed to complete OAuth authentication',
-      error as Error
-    );
+    throw new AuthenticationError('Failed to complete OAuth authentication', error as Error);
   }
 }
 
@@ -133,7 +133,7 @@ async function startOAuthFlow(oauth2Client: OAuth2Client): Promise<StoredTokens>
   // Open browser for user consent
   try {
     await open(authUrl);
-  } catch (error) {
+  } catch (_error) {
     console.error('Failed to open browser automatically. Please visit the URL above manually.');
   }
 

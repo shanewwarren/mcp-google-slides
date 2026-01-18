@@ -3,15 +3,15 @@
  */
 
 import {
+  cmToEmu,
+  EMU_PER_CM,
   EMU_PER_INCH,
   EMU_PER_POINT,
-  EMU_PER_CM,
-  inchesToEmu,
-  emuToInches,
-  pointsToEmu,
-  emuToPoints,
-  cmToEmu,
   emuToCm,
+  emuToInches,
+  emuToPoints,
+  inchesToEmu,
+  pointsToEmu,
 } from '../../src/utils/emu.js';
 
 describe('EMU Conversion Constants', () => {
