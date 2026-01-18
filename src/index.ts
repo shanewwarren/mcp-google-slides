@@ -13,6 +13,12 @@ import {
   CallToolRequestSchema,
   ListToolsRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js';
+import {
+  presentationTools,
+  createPresentation,
+  getPresentation,
+  listPresentations,
+} from './tools/index.js';
 
 /**
  * MCP Server instance
@@ -34,9 +40,7 @@ const server = new Server(
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [
-      // Tools will be added here as they're implemented
-    ],
+    tools: [...presentationTools],
   };
 });
 
@@ -44,16 +48,36 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
  * Handle tool execution requests
  */
 server.setRequestHandler(CallToolRequestSchema, async (request) => {
-  const { name } = request.params;
-  // const args = request.params.arguments; // Will be used when tools are implemented
+  const { name, arguments: args } = request.params;
 
   try {
+    let result: unknown;
+
     switch (name) {
-      // Tool implementations will be added here
+      case 'create_presentation':
+        result = await createPresentation(args as any);
+        break;
+
+      case 'get_presentation':
+        result = await getPresentation(args as any);
+        break;
+
+      case 'list_presentations':
+        result = await listPresentations(args as any);
+        break;
 
       default:
         throw new Error(`Unknown tool: ${name}`);
     }
+
+    return {
+      content: [
+        {
+          type: 'text',
+          text: JSON.stringify(result, null, 2),
+        },
+      ],
+    };
   } catch (error) {
     const errorMessage = error instanceof Error ? error.message : 'Unknown error occurred';
     return {
