@@ -21,6 +21,7 @@ import {
   slideTools,
   addSlide,
   getSlide,
+  deleteSlide,
 } from './tools/index.js';
 
 /**
@@ -75,6 +76,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'get_slide':
         result = await getSlide(args as any);
+        break;
+
+      case 'delete_slide':
+        result = await deleteSlide(args as any);
         break;
 
       default:

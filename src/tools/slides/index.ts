@@ -16,6 +16,12 @@ import {
   type GetSlideInput,
   type GetSlideOutput,
 } from './get-slide.js';
+import {
+  deleteSlide,
+  DeleteSlideInputSchema,
+  type DeleteSlideInput,
+  type DeleteSlideOutput,
+} from './delete-slide.js';
 
 /**
  * Export all slide tool implementations
@@ -23,6 +29,7 @@ import {
 export {
   addSlide,
   getSlide,
+  deleteSlide,
 };
 
 /**
@@ -33,6 +40,8 @@ export type {
   AddSlideOutput,
   GetSlideInput,
   GetSlideOutput,
+  DeleteSlideInput,
+  DeleteSlideOutput,
 };
 
 /**
@@ -41,6 +50,7 @@ export type {
 export {
   AddSlideInputSchema,
   GetSlideInputSchema,
+  DeleteSlideInputSchema,
 };
 
 /**
@@ -96,6 +106,24 @@ export const slideTools = [
         slideId: {
           type: 'string',
           description: 'The slide ID',
+        },
+      },
+      required: ['presentationId', 'slideId'],
+    },
+  },
+  {
+    name: 'delete_slide',
+    description: 'Delete a slide from a presentation',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideId: {
+          type: 'string',
+          description: 'The ID of the slide to delete',
         },
       },
       required: ['presentationId', 'slideId'],

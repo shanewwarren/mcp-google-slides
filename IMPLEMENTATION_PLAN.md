@@ -305,7 +305,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 5: Slide Operation Tools
 
-**Status:** In progress (2/4 tasks complete)
+**Status:** In progress (3/4 tasks complete)
 **Dependencies:** Priority 4 (Presentation tools for testing)
 **Blocking:** Content insertion tools
 
@@ -331,13 +331,14 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - API: `presentations.pages.get()`
   - **Note:** Implemented with comprehensive element type detection (SHAPE, IMAGE, TABLE, VIDEO, LINE, WORD_ART, SHEETS_CHART). Includes descriptions for shapes (with placeholder info and text content snippets), images, tables (dimensions), videos, and other elements. Uses existing SlidesClient.getSlide() method and also fetches presentation to determine slide index. Registered with MCP server in src/index.ts.
 
-- [ ] **Implement delete_slide tool** (refs: specs/slide-operations.md)
+- [x] **Implement delete_slide tool** (refs: specs/slide-operations.md)
   - Dependencies: Slides API client
   - Complexity: Low
   - File: `src/tools/slides/delete-slide.ts`
   - Input: `{ presentationId, slideId }`
   - Output: `{ deleted: true, remainingSlides }`
   - API: `batchUpdate()` with `DeleteObjectRequest`
+  - **Note:** Implemented with validation to prevent deleting the only slide in a presentation. Verifies slide exists before attempting deletion. Returns count of remaining slides after deletion. Registered with MCP server in src/index.ts.
 
 - [ ] **Implement reorder_slides tool** (refs: specs/slide-operations.md)
   - Dependencies: Slides API client
@@ -760,7 +761,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 **Slide Operations:**
 - [x] add_slide
 - [x] get_slide
-- [ ] delete_slide
+- [x] delete_slide
 - [ ] reorder_slides
 
 **Content Insertion:**
@@ -776,7 +777,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 - [ ] create_bullets
 - [ ] remove_bullets (not in initial spec count, added for completeness)
 
-**TOTAL: 5/17 tools implemented (29%)**
+**TOTAL: 6/17 tools implemented (35%)**
 
 ---
 
