@@ -1,6 +1,0 @@
-#!/bin/bash
-# .fresher/hooks/started
-# Runs once when the Ralph loop begins
-
-echo "Starting Fresher loop in $FRESHER_MODE mode"
-exit 0

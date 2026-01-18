@@ -1,7 +1,0 @@
-#!/bin/bash
-# .fresher/hooks/finished
-# Runs when the loop ends
-
-echo "Fresher loop finished: ${FRESHER_FINISH_TYPE:-unknown}"
-echo "Iterations: ${FRESHER_TOTAL_ITERATIONS:-0}, Commits: ${FRESHER_TOTAL_COMMITS:-0}"
-exit 0
