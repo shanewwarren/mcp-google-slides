@@ -111,13 +111,14 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Code challenge: SHA256 hash, base64url encoded
   - **Note:** Also implemented `generateState()` for CSRF protection as per spec section 6.3
 
-- [ ] **Implement OAuth callback server** (refs: specs/oauth-authentication.md)
+- [x] **Implement OAuth callback server** (refs: specs/oauth-authentication.md)
   - Dependencies: PKCE utilities
   - Complexity: Medium
   - File: `src/auth/callback-server.ts`
   - Local HTTP server on `127.0.0.1:8085`
   - CSRF protection with state parameter
   - Automatic shutdown after callback
+  - **Note:** Implemented with comprehensive error handling, custom error types (CallbackTimeoutError, StateMismatchError, OAuthCallbackError), styled HTML success/error pages, and helper function `getCallbackUrl()` for constructing redirect URIs. Supports MCP_GSLIDES_CALLBACK_PORT environment variable.
 
 - [ ] **Implement OAuth client wrapper** (refs: specs/oauth-authentication.md)
   - Dependencies: Token storage, PKCE, callback server
