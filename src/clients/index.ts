@@ -5,11 +5,8 @@
  */
 
 // Drive API client
-export {
-  createDriveClient,
-  DriveClient,
-  PresentationSummary,
-} from './drive-client.js';
+export { createDriveClient, DriveClient } from './drive-client.js';
+export type { PresentationSummary } from './drive-client.js';
 // Slides API client
 export {
   createSlidesClient,

@@ -8,20 +8,36 @@ An MCP (Model Context Protocol) server that enables AI assistants like Claude to
 - **Slide Operations**: Add, delete, and reorder slides with predefined layouts
 - **Content Insertion**: Add text, images, shapes, tables, and speaker notes
 - **Text Formatting**: Style text with fonts, colors, bold, italic, bullets, and more
-- **Zero-Config Auth**: Browser-based OAuth 2.1 with PKCE - no API keys required
+- **Browser-Based Auth**: OAuth 2.1 with PKCE - just sign in with your Google account
 
 ## Prerequisites
 
 - [Bun](https://bun.sh) runtime
 - A Google account with access to Google Slides
+- Google Cloud OAuth 2.0 credentials (see setup below)
 
 ## Installation
 
-### Add to Claude Code
+### 1. Create Google Cloud OAuth Credentials
 
-For full MCP documentation, see [Claude Code MCP docs](https://docs.anthropic.com/en/docs/claude-code/mcp).
+1. Go to [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+2. Create a new project (or select an existing one)
+3. Enable the **Google Slides API** and **Google Drive API**:
+   - Go to **APIs & Services → Library**
+   - Search for and enable both APIs
+4. Configure the **OAuth consent screen**:
+   - Go to **APIs & Services → OAuth consent screen**
+   - Choose "External" user type
+   - Fill in the required fields (app name, support email)
+   - Add scopes: `presentations` and `drive.file`
+   - Add your email as a test user (required while in testing mode)
+5. Create **OAuth 2.0 credentials**:
+   - Go to **APIs & Services → Credentials**
+   - Click **Create Credentials → OAuth client ID**
+   - Choose **Desktop app** as the application type
+   - Save the **Client ID** and **Client Secret**
 
-First, clone and install the server:
+### 2. Clone and Install
 
 ```bash
 git clone https://github.com/shanewwarren/mcp-google-slides.git
@@ -29,28 +45,23 @@ cd mcp-google-slides
 bun install
 ```
 
-Then add to Claude Code:
+### 3. Add to Claude Code
 
 ```bash
-claude mcp add google-slides /path/to/mcp-google-slides/bin/mcp-google-slides
+claude mcp add google-slides /path/to/mcp-google-slides/bin/mcp-google-slides \
+  -e MCP_GSLIDES_CLIENT_ID=your-client-id.apps.googleusercontent.com \
+  -e MCP_GSLIDES_CLIENT_SECRET=your-client-secret
 ```
 
-Or add directly to your `.mcp.json` configuration file:
+Replace `/path/to/mcp-google-slides` with where you cloned the repo, and add your OAuth credentials.
 
-```json
-{
-  "mcpServers": {
-    "google-slides": {
-      "type": "stdio",
-      "command": "/path/to/mcp-google-slides/bin/mcp-google-slides"
-    }
-  }
-}
-```
+Then run `/mcp` in Claude Code to connect to the server.
+
+For full MCP documentation, see [Claude Code MCP docs](https://docs.anthropic.com/en/docs/claude-code/mcp).
 
 ## Authentication
 
-This server uses **browser-based OAuth 2.1 with PKCE** for authentication. No API keys or manual setup required.
+This server uses **browser-based OAuth 2.1 with PKCE** for authentication.
 
 ### How It Works
 
@@ -58,6 +69,12 @@ This server uses **browser-based OAuth 2.1 with PKCE** for authentication. No AP
 2. **Grant Permission**: Sign in with your Google account and authorize the application
 3. **Automatic Token Storage**: Tokens are securely stored locally at `~/.mcp-google-slides/tokens.json`
 4. **Automatic Refresh**: Access tokens are automatically refreshed before expiration
+
+### Multiple Users
+
+The OAuth Client ID/Secret identify the *application*, not the user. Multiple people can use the same credentials to authenticate with their own Google accounts and access their own presentations.
+
+**Note**: While your app is in "testing" mode, only users added as test users in Google Cloud Console can authenticate. To allow anyone, publish the app (users will see an "unverified app" warning) or go through Google's verification process.
 
 ### Re-authentication
 
@@ -84,6 +101,8 @@ The server requests the following permissions:
 
 | Environment Variable | Required | Default | Description |
 |---------------------|----------|---------|-------------|
+| `MCP_GSLIDES_CLIENT_ID` | **Yes** | - | Google OAuth Client ID |
+| `MCP_GSLIDES_CLIENT_SECRET` | **Yes** | - | Google OAuth Client Secret |
 | `MCP_GSLIDES_TOKEN_PATH` | No | `~/.mcp-google-slides/tokens.json` | Path to token storage file |
 | `MCP_GSLIDES_CALLBACK_PORT` | No | `8085` | Port for OAuth callback server |
 
@@ -176,6 +195,23 @@ bun run typecheck
 ```
 
 ## Troubleshooting
+
+### "The OAuth client was not found" (Error 401: invalid_client)
+
+- Ensure `MCP_GSLIDES_CLIENT_ID` and `MCP_GSLIDES_CLIENT_SECRET` are set correctly in your MCP config
+- Verify your OAuth credentials are valid in [Google Cloud Console](https://console.cloud.google.com/apis/credentials)
+- After updating credentials, run `/mcp` in Claude Code to reconnect
+
+### "Access blocked" or "This app isn't verified"
+
+- Your Google Cloud app is in testing mode - add your email as a test user in the OAuth consent screen
+- Or click "Advanced" → "Go to [app name] (unsafe)" to proceed anyway
+
+### MCP server won't connect
+
+- Make sure Bun is installed: `bun --version`
+- Run the server directly to check for errors: `./bin/mcp-google-slides`
+- Verify the path in `~/.claude.json` is correct
 
 ### "Authentication failed" or browser doesn't open
 
