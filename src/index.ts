@@ -20,6 +20,7 @@ import {
   listPresentations,
   slideTools,
   addSlide,
+  getSlide,
 } from './tools/index.js';
 
 /**
@@ -70,6 +71,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'add_slide':
         result = await addSlide(args as any);
+        break;
+
+      case 'get_slide':
+        result = await getSlide(args as any);
         break;
 
       default:

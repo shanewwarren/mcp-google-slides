@@ -10,12 +10,19 @@ import {
   type AddSlideInput,
   type AddSlideOutput,
 } from './add-slide.js';
+import {
+  getSlide,
+  GetSlideInputSchema,
+  type GetSlideInput,
+  type GetSlideOutput,
+} from './get-slide.js';
 
 /**
  * Export all slide tool implementations
  */
 export {
   addSlide,
+  getSlide,
 };
 
 /**
@@ -24,6 +31,8 @@ export {
 export type {
   AddSlideInput,
   AddSlideOutput,
+  GetSlideInput,
+  GetSlideOutput,
 };
 
 /**
@@ -31,6 +40,7 @@ export type {
  */
 export {
   AddSlideInputSchema,
+  GetSlideInputSchema,
 };
 
 /**
@@ -71,6 +81,24 @@ export const slideTools = [
         },
       },
       required: ['presentationId'],
+    },
+  },
+  {
+    name: 'get_slide',
+    description: 'Get details about a specific slide',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideId: {
+          type: 'string',
+          description: 'The slide ID',
+        },
+      },
+      required: ['presentationId', 'slideId'],
     },
   },
 ] as const;
