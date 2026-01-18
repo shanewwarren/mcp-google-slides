@@ -92,7 +92,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ### Tasks
 
-- [ ] **Implement token storage** (refs: specs/oauth-authentication.md)
+- [x] **Implement token storage** (refs: specs/oauth-authentication.md)
   - Dependencies: Project foundation
   - Complexity: Low
   - File: `src/auth/token-store.ts`
@@ -100,6 +100,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Default path: `~/.mcp-google-slides/tokens.json`
   - File permissions: 0600 (owner read/write only)
   - Environment variable support: `MCP_GSLIDES_TOKEN_PATH`
+  - **Note:** Also created `src/types/common.ts` with StoredTokens type and other common types. Added helper function `areTokensExpiring()` for token expiration checking.
 
 - [ ] **Implement PKCE utilities** (refs: specs/oauth-authentication.md)
   - Dependencies: Token storage
