@@ -27,6 +27,7 @@ import {
   insertText,
   insertImage,
   createShape,
+  createTable,
 } from './tools/index.js';
 
 /**
@@ -101,6 +102,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'create_shape':
         result = await createShape(args as any);
+        break;
+
+      case 'create_table':
+        result = await createTable(args as any);
         break;
 
       default:

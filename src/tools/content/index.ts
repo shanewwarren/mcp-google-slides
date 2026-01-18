@@ -22,11 +22,17 @@ import {
   type CreateShapeInput,
   type CreateShapeOutput,
 } from './create-shape.js';
+import {
+  createTable,
+  CreateTableInputSchema,
+  type CreateTableInput,
+  type CreateTableOutput,
+} from './create-table.js';
 
 /**
  * Export all content tool implementations
  */
-export { insertText, insertImage, createShape };
+export { insertText, insertImage, createShape, createTable };
 
 /**
  * Export all content tool types
@@ -38,12 +44,19 @@ export type {
   InsertImageOutput,
   CreateShapeInput,
   CreateShapeOutput,
+  CreateTableInput,
+  CreateTableOutput,
 };
 
 /**
  * Export all content tool schemas
  */
-export { InsertTextInputSchema, InsertImageInputSchema, CreateShapeInputSchema };
+export {
+  InsertTextInputSchema,
+  InsertImageInputSchema,
+  CreateShapeInputSchema,
+  CreateTableInputSchema,
+};
 
 /**
  * MCP tool definitions for content insertion
@@ -197,6 +210,51 @@ export const contentTools = [
         },
       },
       required: ['presentationId', 'slideId', 'shapeType', 'position'],
+    },
+  },
+  {
+    name: 'create_table',
+    description: 'Create a table on a slide',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        slideId: {
+          type: 'string',
+          description: 'The slide to add the table to',
+        },
+        rows: {
+          type: 'number',
+          description: 'Number of rows (1-25)',
+        },
+        columns: {
+          type: 'number',
+          description: 'Number of columns (1-20)',
+        },
+        position: {
+          type: 'object',
+          description: 'Position and size for the table',
+          properties: {
+            x: { type: 'number', description: 'Left edge in inches' },
+            y: { type: 'number', description: 'Top edge in inches' },
+            width: { type: 'number', description: 'Width in inches' },
+            height: { type: 'number', description: 'Height in inches' },
+          },
+          required: ['x', 'y', 'width', 'height'],
+        },
+        data: {
+          type: 'array',
+          description: 'Table data as 2D array of strings (row-major order)',
+          items: {
+            type: 'array',
+            items: { type: 'string' },
+          },
+        },
+      },
+      required: ['presentationId', 'slideId', 'rows', 'columns', 'position'],
     },
   },
 ] as const;

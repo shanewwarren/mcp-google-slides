@@ -1,25 +1,25 @@
 # Implementation Plan: MCP Google Slides
 
 **Generated:** 2026-01-17 (Updated)
-**Status:** Core features complete (10/16 tools), formatting tools remaining
+**Status:** Core features complete (11/16 tools), formatting tools remaining
 **Based on:** specs/*.md (6 specification files)
 
 ---
 
 ## Executive Summary
 
-This project is in **active development** with core infrastructure and 10 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories are complete. Remaining work focuses on formatting tools (4 tools) and additional content tools (2 tools).
+This project is in **active development** with core infrastructure and 11 of 16 tools fully implemented. All authentication, API clients, utilities, and core tool categories are complete. Remaining work focuses on formatting tools (3 tools) and additional content tools (1 tool).
 
 ### Gap Analysis
 - **Specifications:** ✅ 6/6 complete
-- **Source Code:** ✅ 63% implemented (10/16 tools)
-- **Tools:** ✅ 10/16 implemented
+- **Source Code:** ✅ 69% implemented (11/16 tools)
+- **Tools:** ✅ 11/16 implemented
 - **Infrastructure:** ✅ Complete (auth, clients, utilities, MCP server)
 
 ### Implementation Statistics
 - **Total MCP Tools:** 16 (specifications)
-- **Implemented Tools:** 10 (presentations: 3, slides: 4, content: 3)
-- **Remaining Tools:** 6 (content: 2, formatting: 4)
+- **Implemented Tools:** 11 (presentations: 3, slides: 4, content: 4)
+- **Remaining Tools:** 5 (content: 1, formatting: 3)
 - **Total Components:** ~40 files across 6 modules
 - **External APIs:** Google Slides API, Google Drive API, Google OAuth 2.0
 
@@ -415,7 +415,7 @@ Based on the current implementation state, here are the prioritized remaining ta
 
 ## Priority 6: Content Insertion Tools
 
-**Status:** ✅ Complete (3/3 implemented) + 2 remaining
+**Status:** ✅ Complete (4/5 implemented) + 1 remaining
 **Dependencies:** Priority 5 (Slide tools), Priority 3 (Utilities)
 **Blocking:** None
 
@@ -469,14 +469,15 @@ Based on the current implementation state, here are the prioritized remaining ta
 
 ### Remaining Tasks 🔄
 
-- [ ] **Implement create_table tool** (refs: specs/content-insertion.md)
-  - Dependencies: Slides API client, EMU utils
+- [x] **Implement create_table tool** (refs: specs/content-insertion.md)
+  - Dependencies: Slides API client ✅, EMU utils ✅
   - Complexity: High
-  - File: `src/tools/content/create-table.ts`
+  - File: `src/tools/content/create-table.ts` ✅
   - Input: `{ presentationId, slideId, rows, columns, position, data? }`
   - Output: `{ tableId }`
   - API: `batchUpdate()` with `CreateTableRequest` + `InsertTextRequest` per cell
   - Optional: Populate cells with data array
+  - **Note:** ✅ Implemented with full support for creating tables (1-25 rows, 1-20 columns) with optional data population. Includes Zod schema validation for dimensions and data validation to ensure data array matches table dimensions. Uses batch updates to create table and populate all cells in a single API call. Registered with MCP server in src/index.ts.
 
 - [ ] **Implement set_speaker_notes tool** (refs: specs/content-insertion.md)
   - Dependencies: Slides API client, get_slide tool
@@ -833,7 +834,7 @@ Based on the current implementation state, here are the prioritized remaining ta
 - [x] insert_text ✅
 - [x] insert_image ✅
 - [x] create_shape ✅
-- [ ] create_table 🔄
+- [x] create_table ✅
 - [ ] set_speaker_notes 🔄
 
 **Text Formatting:**
@@ -841,8 +842,8 @@ Based on the current implementation state, here are the prioritized remaining ta
 - [ ] format_paragraph 🔄
 - [ ] create_bullets 🔄
 
-**TOTAL: 10/16 tools implemented (63%)**
-**Remaining: 6 tools (2 content + 3 formatting + 1 removed from original count)**
+**TOTAL: 11/16 tools implemented (69%)**
+**Remaining: 5 tools (1 content + 3 formatting + 1 removed from original count)**
 
 ---
 
