@@ -102,13 +102,14 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Environment variable support: `MCP_GSLIDES_TOKEN_PATH`
   - **Note:** Also created `src/types/common.ts` with StoredTokens type and other common types. Added helper function `areTokensExpiring()` for token expiration checking.
 
-- [ ] **Implement PKCE utilities** (refs: specs/oauth-authentication.md)
+- [x] **Implement PKCE utilities** (refs: specs/oauth-authentication.md)
   - Dependencies: Token storage
   - Complexity: Medium
   - File: `src/auth/pkce.ts`
   - Functions: `generateCodeVerifier()`, `generateCodeChallenge()`
   - Code verifier: 43-128 chars, URL-safe
   - Code challenge: SHA256 hash, base64url encoded
+  - **Note:** Also implemented `generateState()` for CSRF protection as per spec section 6.3
 
 - [ ] **Implement OAuth callback server** (refs: specs/oauth-authentication.md)
   - Dependencies: PKCE utilities
