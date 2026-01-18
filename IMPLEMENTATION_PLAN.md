@@ -86,7 +86,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
 
 ## Priority 1: Authentication Foundation
 
-**Status:** Not started
+**Status:** ✅ Complete
 **Dependencies:** Priority 0 (Project Foundation)
 **Blocking:** All other features require authentication
 
@@ -120,7 +120,7 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - Automatic shutdown after callback
   - **Note:** Implemented with comprehensive error handling, custom error types (CallbackTimeoutError, StateMismatchError, OAuthCallbackError), styled HTML success/error pages, and helper function `getCallbackUrl()` for constructing redirect URIs. Supports MCP_GSLIDES_CALLBACK_PORT environment variable.
 
-- [ ] **Implement OAuth client wrapper** (refs: specs/oauth-authentication.md)
+- [x] **Implement OAuth client wrapper** (refs: specs/oauth-authentication.md)
   - Dependencies: Token storage, PKCE, callback server
   - Complexity: High
   - File: `src/auth/oauth-client.ts`
@@ -130,8 +130,9 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - OAuth scopes:
     - `https://www.googleapis.com/auth/presentations`
     - `https://www.googleapis.com/auth/drive.file`
+  - **Note:** Implemented with comprehensive error handling. Includes `AuthenticationError`, `AuthFlowCancelledError`, and `TokenRefreshFailedError` custom errors. Automatically checks token expiration (5-minute buffer), refreshes tokens when needed, and falls back to interactive OAuth flow when refresh fails. Uses `open` package for browser launch and proper PKCE S256 challenge method.
 
-- [ ] **Create OAuth configuration** (refs: specs/oauth-authentication.md)
+- [x] **Create OAuth configuration** (refs: specs/oauth-authentication.md)
   - Dependencies: OAuth client
   - Complexity: Low
   - File: `src/auth/config.ts`
@@ -140,12 +141,14 @@ This project is in the **specification-complete, pre-implementation** phase. All
   - OAuth endpoints:
     - Authorization: `https://accounts.google.com/o/oauth2/v2/auth`
     - Token: `https://oauth2.googleapis.com/token`
+  - **Note:** Supports environment variables `MCP_GSLIDES_CLIENT_ID` and `MCP_GSLIDES_CLIENT_SECRET` for custom OAuth credentials. Exports `getOAuthConfig()` function, `OAUTH_ENDPOINTS` constants, and `OAUTH_SCOPES` array.
 
-- [ ] **Create auth module exports** (refs: specs/oauth-authentication.md)
+- [x] **Create auth module exports** (refs: specs/oauth-authentication.md)
   - Dependencies: All auth components
   - Complexity: Low
   - File: `src/auth/index.ts`
   - Export `getAuthenticatedClient()` as primary API
+  - **Note:** Created comprehensive exports including all auth functions, error types, and utilities. Primary API is `getAuthenticatedClient()`. Also exports token storage utilities, PKCE utilities, and callback server for advanced use cases and testing.
 
 ---
 
