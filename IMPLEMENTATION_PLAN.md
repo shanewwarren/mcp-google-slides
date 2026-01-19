@@ -1,8 +1,8 @@
 # Implementation Plan: MCP Google Slides
 
-**Generated:** 2026-01-17 (Updated)
-**Status:** All core features complete (16/16 tools)
-**Based on:** specs/*.md (6 specification files)
+**Generated:** 2026-01-18 (Updated)
+**Status:** Core features complete, new auth tools planned (16/17 tools)
+**Based on:** specs/*.md (7 specification files)
 
 ---
 
@@ -11,15 +11,15 @@
 This project is **complete** with all core infrastructure and all 16 tools fully implemented. All authentication, API clients, utilities, and all tool categories (presentations, slides, content, formatting) are complete and functional.
 
 ### Gap Analysis
-- **Specifications:** ✅ 6/6 complete
-- **Source Code:** ✅ 100% implemented (16/16 tools)
-- **Tools:** ✅ 16/16 implemented
+- **Specifications:** ✅ 7/7 complete
+- **Source Code:** 94% implemented (16/17 tools)
+- **Tools:** 16/17 implemented
 - **Infrastructure:** ✅ Complete (auth, clients, utilities, MCP server)
 
 ### Implementation Statistics
-- **Total MCP Tools:** 16 (specifications)
-- **Implemented Tools:** 16 (presentations: 3, slides: 4, content: 5, formatting: 4)
-- **Remaining Tools:** 0
+- **Total MCP Tools:** 17 (specifications)
+- **Implemented Tools:** 16 (presentations: 3, slides: 4, content: 5, formatting: 3, auth: 0)
+- **Remaining Tools:** 1 (logout)
 - **Total Components:** ~40 files across 6 modules
 - **External APIs:** Google Slides API, Google Drive API, Google OAuth 2.0
 
@@ -36,7 +36,17 @@ Based on the current implementation state, here are the prioritized remaining ta
 2. ✅ **format_paragraph** - Paragraph-level formatting (implemented)
 3. ✅ **create_bullets** - List creation (implemented)
 
-### Phase 2: Testing & Documentation (Priority: HIGH)
+### Phase 2: Credential Management Tools (Priority: HIGH)
+**Status:** Planned
+**Spec:** specs/credential-management.md
+
+1. [ ] **logout** - Clear stored OAuth tokens to enable account switching
+   - File: `src/tools/auth/logout.ts`
+   - Calls existing `deleteTokens()` from `src/auth/token-store.ts`
+   - No parameters required
+   - Returns confirmation message
+
+### Phase 3: Testing & Documentation (Priority: HIGH)
 **Impact:** Production readiness
 
 1. Integration tests for formatting tools
@@ -45,7 +55,7 @@ Based on the current implementation state, here are the prioritized remaining ta
 4. Create comprehensive API documentation
 
 ### Success Criteria
-- ✅ All 16 tools from specifications implemented
+- ⚠️ All 17 tools from specifications implemented (16/17)
 - ✅ Comprehensive Zod validation for all inputs
 - ⚠️ Integration tests for all tools (in progress)
 - ⚠️ Updated documentation with examples (pending)
@@ -793,7 +803,8 @@ Based on the current implementation state, here are the prioritized remaining ta
 | slide-operations.md | ✅ Complete | 4 | 4 |
 | content-insertion.md | ✅ Complete | 5 | 5 |
 | text-formatting.md | ✅ Complete | 3 | 3 |
-| **TOTAL** | **100% Complete** | **16** | **16** |
+| credential-management.md | ⏳ Planned | 1 | 0 |
+| **TOTAL** | **94% Complete** | **17** | **16** |
 
 ### Tool Implementation Checklist
 **Presentation Management:**
@@ -819,8 +830,11 @@ Based on the current implementation state, here are the prioritized remaining ta
 - [x] format_paragraph ✅
 - [x] create_bullets ✅
 
-**TOTAL: 16/16 tools implemented (100%)**
-**Remaining: 0 tools**
+**Credential Management:**
+- [ ] logout ⏳
+
+**TOTAL: 16/17 tools implemented (94%)**
+**Remaining: 1 tool (logout)**
 
 ---
 

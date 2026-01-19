@@ -20,6 +20,7 @@ This directory contains specifications for the project's features and systems. E
 | Spec | Status | Purpose |
 |------|--------|---------|
 | [oauth-authentication.md](./oauth-authentication.md) | Implemented | Browser-based Google OAuth 2.1 with PKCE and token management |
+| [credential-management.md](./credential-management.md) | Planned | MCP tools for logout and account switching |
 
 ## Presentation Operations
 
