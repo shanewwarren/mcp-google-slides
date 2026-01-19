@@ -12,6 +12,7 @@ import { StdioServerTransport } from '@modelcontextprotocol/sdk/server/stdio.js'
 import { CallToolRequestSchema, ListToolsRequestSchema } from '@modelcontextprotocol/sdk/types.js';
 import {
   addSlide,
+  authTools,
   contentTools,
   createBullets,
   createPresentation,
@@ -26,6 +27,7 @@ import {
   insertImage,
   insertText,
   listPresentations,
+  logout,
   presentationTools,
   reorderSlides,
   setSpeakerNotes,
@@ -52,7 +54,7 @@ const server = new Server(
  */
 server.setRequestHandler(ListToolsRequestSchema, async () => {
   return {
-    tools: [...presentationTools, ...slideTools, ...contentTools, ...formattingTools],
+    tools: [...presentationTools, ...slideTools, ...contentTools, ...formattingTools, ...authTools],
   };
 });
 
@@ -124,6 +126,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'create_bullets':
         result = await createBullets(args as any);
+        break;
+
+      case 'logout':
+        result = await logout(args as any);
         break;
 
       default:

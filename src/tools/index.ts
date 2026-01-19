@@ -4,6 +4,8 @@
  * Centralized export for all MCP tool implementations.
  */
 
+// Authentication management tools
+export * from './auth/index.js';
 // Content insertion tools
 export * from './content/index.js';
 // Text formatting tools
