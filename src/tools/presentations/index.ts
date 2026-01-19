@@ -22,11 +22,17 @@ import {
   type ListPresentationsOutput,
   listPresentations,
 } from './list.js';
+import {
+  type DuplicatePresentationInput,
+  DuplicatePresentationInputSchema,
+  type DuplicatePresentationOutput,
+  duplicatePresentation,
+} from './duplicate.js';
 
 /**
  * Export all presentation tool implementations
  */
-export { createPresentation, getPresentation, listPresentations };
+export { createPresentation, getPresentation, listPresentations, duplicatePresentation };
 
 /**
  * Export all presentation tool types
@@ -38,12 +44,19 @@ export type {
   GetPresentationOutput,
   ListPresentationsInput,
   ListPresentationsOutput,
+  DuplicatePresentationInput,
+  DuplicatePresentationOutput,
 };
 
 /**
  * Export all presentation tool schemas
  */
-export { CreatePresentationInputSchema, GetPresentationInputSchema, ListPresentationsInputSchema };
+export {
+  CreatePresentationInputSchema,
+  GetPresentationInputSchema,
+  ListPresentationsInputSchema,
+  DuplicatePresentationInputSchema,
+};
 
 /**
  * MCP tool definitions for presentation management
@@ -89,6 +102,25 @@ export const presentationTools = [
           default: 10,
         },
       },
+    },
+  },
+  {
+    name: 'duplicate_presentation',
+    description:
+      'Duplicate an existing presentation to create a new copy. Preserves all styling, layouts, and content.',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The ID of the presentation to duplicate',
+        },
+        title: {
+          type: 'string',
+          description: 'The title for the new presentation',
+        },
+      },
+      required: ['presentationId', 'title'],
     },
   },
 ] as const;

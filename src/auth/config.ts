@@ -38,7 +38,7 @@ export const OAUTH_ENDPOINTS = {
  */
 export const OAUTH_SCOPES = [
   'https://www.googleapis.com/auth/presentations',
-  'https://www.googleapis.com/auth/drive.file',
+  'https://www.googleapis.com/auth/drive',
 ] as const;
 
 /**

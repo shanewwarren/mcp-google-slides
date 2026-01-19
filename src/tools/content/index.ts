@@ -34,11 +34,17 @@ import {
   type SetSpeakerNotesOutput,
   setSpeakerNotes,
 } from './set-speaker-notes.js';
+import {
+  type ReplaceTextInput,
+  ReplaceTextInputSchema,
+  type ReplaceTextOutput,
+  replaceText,
+} from './replace-text.js';
 
 /**
  * Export all content tool implementations
  */
-export { insertText, insertImage, createShape, createTable, setSpeakerNotes };
+export { insertText, insertImage, createShape, createTable, setSpeakerNotes, replaceText };
 
 /**
  * Export all content tool types
@@ -54,6 +60,8 @@ export type {
   CreateTableOutput,
   SetSpeakerNotesInput,
   SetSpeakerNotesOutput,
+  ReplaceTextInput,
+  ReplaceTextOutput,
 };
 
 /**
@@ -65,6 +73,7 @@ export {
   CreateShapeInputSchema,
   CreateTableInputSchema,
   SetSpeakerNotesInputSchema,
+  ReplaceTextInputSchema,
 };
 
 /**
@@ -284,6 +293,28 @@ export const contentTools = [
         },
       },
       required: ['presentationId', 'slideId', 'notes'],
+    },
+  },
+  {
+    name: 'replace_text',
+    description: 'Replace all text in an existing text box or shape with new text',
+    inputSchema: {
+      type: 'object',
+      properties: {
+        presentationId: {
+          type: 'string',
+          description: 'The presentation ID',
+        },
+        objectId: {
+          type: 'string',
+          description: 'The ID of the text box or shape containing text to replace',
+        },
+        text: {
+          type: 'string',
+          description: 'The new text content to set',
+        },
+      },
+      required: ['presentationId', 'objectId', 'text'],
     },
   },
 ] as const;

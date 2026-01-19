@@ -38,6 +38,48 @@ export class DriveClient {
   }
 
   /**
+   * Copy a presentation to create a new one
+   *
+   * @param fileId - The ID of the presentation to copy
+   * @param name - The name for the new presentation
+   * @returns The new presentation's ID and link
+   * @throws {PermissionDeniedError} If no access to the file
+   * @throws {QuotaExceededError} If API quota is exceeded
+   */
+  async copyPresentation(
+    fileId: string,
+    name: string
+  ): Promise<{ presentationId: string; title: string; link: string }> {
+    try {
+      const response = await this.drive.files.copy({
+        fileId,
+        requestBody: {
+          name,
+        },
+        fields: 'id, name, webViewLink',
+      });
+
+      const newId = response.data.id || '';
+      return {
+        presentationId: newId,
+        title: response.data.name || name,
+        link: response.data.webViewLink || `https://docs.google.com/presentation/d/${newId}/edit`,
+      };
+    } catch (error: any) {
+      if (error.code === 403) {
+        throw new PermissionDeniedError('Drive API - cannot copy this file');
+      }
+      if (error.code === 404) {
+        throw new Error(`Presentation not found: ${fileId}`);
+      }
+      if (error.code === 429 || error.message?.includes('quota')) {
+        throw new QuotaExceededError();
+      }
+      throw error;
+    }
+  }
+
+  /**
    * List presentations created by this application
    *
    * With the drive.file scope, this only returns presentations

@@ -19,6 +19,7 @@ import {
   createShape,
   createTable,
   deleteSlide,
+  duplicatePresentation,
   formatParagraph,
   formatText,
   formattingTools,
@@ -30,6 +31,7 @@ import {
   logout,
   presentationTools,
   reorderSlides,
+  replaceText,
   setSpeakerNotes,
   slideTools,
 } from './tools/index.js';
@@ -80,6 +82,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
         result = await listPresentations(args as any);
         break;
 
+      case 'duplicate_presentation':
+        result = await duplicatePresentation(args as any);
+        break;
+
       case 'add_slide':
         result = await addSlide(args as any);
         break;
@@ -114,6 +120,10 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
 
       case 'set_speaker_notes':
         result = await setSpeakerNotes(args as any);
+        break;
+
+      case 'replace_text':
+        result = await replaceText(args as any);
         break;
 
       case 'format_text':

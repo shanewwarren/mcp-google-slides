@@ -27,8 +27,7 @@ export const AddSlideInputSchema = z.object({
       'CAPTION_ONLY',
     ])
     .optional()
-    .default('TITLE_AND_BODY')
-    .describe('The predefined layout to use'),
+    .describe('The predefined layout to use. Omit to create a blank slide without a layout reference.'),
   insertionIndex: z
     .number()
     .int()
@@ -85,15 +84,21 @@ export async function addSlide(input: AddSlideInput): Promise<AddSlideOutput> {
   const slideId = generateObjectId();
 
   // Build the CreateSlideRequest
+  const createSlideRequest: any = {
+    objectId: slideId,
+    insertionIndex: validatedInput.insertionIndex,
+  };
+
+  // Only add slideLayoutReference if a layout is specified
+  if (validatedInput.layout) {
+    createSlideRequest.slideLayoutReference = {
+      predefinedLayout: validatedInput.layout,
+    };
+  }
+
   const requests = [
     {
-      createSlide: {
-        objectId: slideId,
-        insertionIndex: validatedInput.insertionIndex,
-        slideLayoutReference: {
-          predefinedLayout: validatedInput.layout,
-        },
-      },
+      createSlide: createSlideRequest,
     },
   ];
 

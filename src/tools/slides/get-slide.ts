@@ -75,7 +75,7 @@ export async function getSlide(input: GetSlideInput): Promise<GetSlideOutput> {
         } else if (element.shape.shapeType) {
           description = `Shape type: ${element.shape.shapeType}`;
         }
-        // Include text content if available
+        // Include text content if available (full text, no truncation)
         if (element.shape.text?.textElements) {
           const textContent = element.shape.text.textElements
             .map((te) => te.textRun?.content || '')
@@ -83,8 +83,8 @@ export async function getSlide(input: GetSlideInput): Promise<GetSlideOutput> {
             .trim();
           if (textContent) {
             description = description
-              ? `${description} - Text: "${textContent.substring(0, 50)}${textContent.length > 50 ? '...' : ''}"`
-              : `Text: "${textContent.substring(0, 50)}${textContent.length > 50 ? '...' : ''}"`;
+              ? `${description} - Text: "${textContent}"`
+              : `Text: "${textContent}"`;
           }
         }
       } else if (element.image) {
